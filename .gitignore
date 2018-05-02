@@ -1,0 +1,9 @@
+/*.log
+/target
+/*-init.clj
+/resources/public/js/compiled
+/resources/public/css/*
+out
+/.idea/*
+/resources/public/css/*
+/recruit-app.iml
