@@ -1,0 +1,150 @@
+{:env                              :qa
+ :shopify                          {:base-url             "https://test-ladders.myshopify.com"
+                                    :secret               "711f6a234d28d14dc8e9ee939a81e6cb"
+                                    :redirects            {:promoted-job "https://test-ladders.myshopify.com/cart/38920849670:1"}
+                                    :full-access          "https://test-ladders.myshopify.com/products/full-access"
+                                    :webhook-secrets      {:order-created "caa67f59c191f3af328071a69e92400fccfc3f505d49a8315651715d59dde7cd"}
+                                    :products-ids-by-type {:promotion-credit #{9952320198 10139866694 10139816966}}}
+ :auth                             {:secret "09bb866bb1eef5f5d2016c95ac398897"}
+ :superuser-role-id                4
+ :host                             "https://ra-qa1.aws.theladders.com"
+ :ladders-company-id               1853
+ :recruiter-pending-days           7                        ;; days that a recruiter can remain pending and still be visible in admin tool
+ :recruiter-pending-escalated-days 180                      ;; days that a recruiter can remain pending escalated and still be visible in admin tool
+ :services                         {:auth            {:authenticate                   "http://services-qa.aws.theladders.com/legacy/recruiter-auth/v1/authenticate"
+                                                      :impersonate                    "http://services-qa.aws.theladders.com/legacy/recruiter-auth/v1/impersonate"
+                                                      :refresh-token                  "http://services-qa.aws.theladders.com/legacy/recruiter-auth/v1/refresh-access-token"
+                                                      :invalidate-token               "http://services-qa.aws.theladders.com/legacy/recruiter-auth/v1/invalidate-refresh-token"
+                                                      :generate-code                  "http://services-qa.aws.theladders.com/legacy/recruiter-auth/v1/generate-code"
+                                                      :verified?                      "http://services-qa.aws.theladders.com/legacy/recruiter-auth/v1/verified"
+                                                      :authenticate-via-code          "http://services-qa.aws.theladders.com/legacy/recruiter-auth/v1/authenticate-via-code"
+                                                      :generate-forgot-password-token "http://services-qa.aws.theladders.com/legacy/recruiter-auth/v1/generate-forgot-password-token"
+                                                      :decrypt-forgot-password-token  "http://services-qa.aws.theladders.com/legacy/recruiter-auth/v1/decrypt-forgot-password-token"
+                                                      :change-password                "http://services-qa.aws.theladders.com/legacy/recruiter-auth/v1/change-password"}
+                                    :candidate-notes "http://services-qa.aws.theladders.com/legacy/recruiter-notes/v1/"
+                                    :jobseekers      {:read                 "http://services-qa.aws.theladders.com/legacy/jobseeker/v1/recruiter-read"
+                                                      :read-multi           "http://services-qa.aws.theladders.com/legacy/jobseeker/v1/recruiter-read-multi"
+                                                      :suggested-candidates "http://services-qa.aws.theladders.com/legacy/match/v1/suggest-jobseekers"}
+                                    :templates       {:create "http://services-qa.aws.theladders.com/legacy/recruiter-email-templates/v1/create"
+                                                      :read   "http://services-qa.aws.theladders.com/legacy/recruiter-email-templates/v1/read-all"
+                                                      :update "http://services-qa.aws.theladders.com/legacy/recruiter-email-templates/v1/overwrite"
+                                                      :delete "http://services-qa.aws.theladders.com/legacy/recruiter-email-templates/v1/delete"}
+                                    :jobs            {:read                 "http://qa-lambda.aws.theladders.com/ws/job-app-view/job-interactions"
+                                                      :read-multi           "http://qa-lambda.aws.theladders.com/ws/job-app-view/manage-jobs"
+                                                      :read-superuser       "http://services-qa.aws.theladders.com/legacy/jobs/v1/"
+                                                      :create               "http://services-qa.aws.theladders.com/legacy/job-service/v1/post-job"
+                                                      :promotion            "http://services-qa.aws.theladders.com/legacy/job-service/v1/job-promotion"
+                                                      :promotion-list       "http://services-qa.aws.theladders.com/legacy/job-service/v1/job-promotion-list"
+                                                      :promote              "http://services-qa.aws.theladders.com/legacy/job-service/v1/promote-job"
+                                                      :index-es             "http://services-qa.aws.theladders.com/legacy/elastic-import/v1/index-job-application-by-id/"
+                                                      :harvest-index-es     "http://qa-lambda.aws.theladders.com/ws/sql-indexer/index-record-by-id"
+                                                      :update               "http://services-qa.aws.theladders.com/legacy/jobs/v1"
+                                                      :admin-promote        "http://services-qa.aws.theladders.com/legacy/job-service/v1/admin-promote-job"
+                                                      :admin-promote-cancel "http://services-qa.aws.theladders.com/legacy/job-service/v1/admin-cancel-job-promotion"
+                                                      :application-view     "http://services-qa.aws.theladders.com/legacy/application-viewed/v1/application-viewed"
+                                                      :dismiss-candidate    "http://services-qa.aws.theladders.com/legacy/job-application/v1/dismiss-candidate"
+                                                      :dismiss-email        "http://services-qa.aws.theladders.com/legacy/application-dismissed/v1/application-dismissed"}
+                                    :locations       {:autocomplete "http://services-qa.aws.theladders.com/legacy/location/v1/autocomplete"
+                                                      :parser       "http://services-qa.aws.theladders.com/legacy/location/v1/parse-location"}
+                                    :company         {:autocomplete "http://qa-lambda.aws.theladders.com/ws/company-new/auto-complete-name"}
+                                    :recruiters      {:read                         "http://services-qa.aws.theladders.com/legacy/recruiter/v1"
+                                                      :image                        "http://services-qa.aws.theladders.com/legacy/kv/v1/source/recruiter-profile-image/key/"
+                                                      :create                       "http://services-qa.aws.theladders.com/legacy/recruiter/v1"
+                                                      :update                       "http://services-qa.aws.theladders.com/legacy/recruiter/v1"
+                                                      :preapproved-company          "http://services-qa.aws.theladders.com/legacy/recruiter/v1/preapproved-company"
+                                                      :email-exists?                "http://services-qa.aws.theladders.com/legacy/recruiter/v1/email-exists"
+                                                      :pending-recruiters           "http://services-qa.aws.theladders.com/legacy/recruiter/v1/pending-recruiters"
+                                                      :pending-escalated-recruiters "http://services-qa.aws.theladders.com/legacy/recruiter/v1/pending-escalated-recruiters"
+                                                      :by-approval-period           "http://services-qa.aws.theladders.com/legacy/recruiter/v1/by-approval-period"
+                                                      :make-superuser               "http://services-qa.aws.theladders.com/legacy/recruiter/v1/make-superuser"
+                                                      :remove-superuser             "http://services-qa.aws.theladders.com/legacy/recruiter/v1/remove-superuser"
+                                                      :admin-note                   "http://services-qa.aws.theladders.com/legacy/recruiter/v1/admin-note"
+                                                      :create-admin-note            "http://services-qa.aws.theladders.com/legacy/recruiter/v1/create-admin-note"
+                                                      :update-admin-note            "http://services-qa.aws.theladders.com/legacy/recruiter/v1/update-admin-note"
+                                                      :search                       "http://services-qa.aws.theladders.com/legacy/recruiter/v1/recruiter-search"}
+                                    :resumes         {:read          "http://services-qa.aws.theladders.com/legacy/resume/v2/get-resume"
+                                                      :unredacted    "http://qa-lambda.aws.theladders.com/ws/resume/resume"
+                                                      :read-metadata "http://services-qa.aws.theladders.com/legacy/resume/v2/resume-metadata/"
+                                                      :share-data    "http://services-qa.aws.theladders.com/legacy/kv/v1/source/recruiter-resume-share/key/"
+                                                      :share-email   "http://services-qa.aws.theladders.com/legacy/mail/v1/send-recruiter-share"
+                                                      :convert       "http://resume-qa.aws.theladders.com/user/%d/resume/%d/preview"
+                                                      :create-key    "http://services-qa.aws.theladders.com/legacy/resume/v1/create-key/%d/%s"
+                                                      :public-resume "http://services-qa.aws.theladders.com/legacy/resume/v1/public-resume/%d/%s"}
+                                    :search          {:es "http://qa-lambda.aws.theladders.com/ws/es-custom-search/search"}
+                                    :saved-search    {:fetch-one "http://services-qa.aws.theladders.com/legacy/recruiter-saved-search/v1/fetch/"
+                                                      :fetch-all "http://services-qa.aws.theladders.com/legacy/recruiter-saved-search/v1/fetch-all/"
+                                                      :add       "http://services-qa.aws.theladders.com/legacy/recruiter-saved-search/v1/add"
+                                                      :force-add "http://services-qa.aws.theladders.com/legacy/recruiter-saved-search/v1/force-add"
+                                                      :update    "http://services-qa.aws.theladders.com/legacy/recruiter-saved-search/v1/overwrite"
+                                                      :delete    "http://services-qa.aws.theladders.com/legacy/recruiter-saved-search/v1/delete"}
+                                    :taxonomy        {:roles-to-last-specialty-ids  "http://services-qa.aws.theladders.com/legacy/taxonomy/v1/roles-to-latest-specialty-ids"
+                                                      :specialties-to-last-role-ids "http://services-qa.aws.theladders.com/legacy/taxonomy/v1/specialties-to-latest-role-ids"
+                                                      :role-labels                  "http://services-qa.aws.theladders.com/legacy/taxonomy/v1/roles-labels-version"}
+                                    :kafka           {:event          "http://rashomon-qa.aws.theladders.com/modern/v1/event"
+                                                      :simple-command "http://rashomon-qa.aws.theladders.com/modern/v1/simple-command"
+                                                      :command        "http://rashomon-qa.aws.theladders.com/modern/v1/command"
+                                                      :query          "http://rashomon-qa.aws.theladders.com/modern/v1/query/"
+                                                      :view           "http://rashomon-qa.aws.theladders.com/modern/v1/view"}
+                                    :superuser       {:read-redact-permissions   "http://qa-lambda.aws.theladders.com/ws/recruiter/get-redact-permission"
+                                                      :save-redact-permissions   "http://qa-lambda.aws.theladders.com/ws/recruiter/set-redact-permission-dates"
+                                                      :remove-redact-permissions "http://qa-lambda.aws.theladders.com/ws/recruiter/remove-redact-permission"}
+                                    :inventory       {:read     "http://services-qa.aws.theladders.com/legacy/inventory/v1/get-inventory-info/"
+                                                      :purchase "http://services-qa.aws.theladders.com/legacy/inventory/v1/purchase-product"
+                                                      :use      "http://services-qa.aws.theladders.com/legacy/inventory/v1/use-product"}
+                                    :email-prefs     {:by-id   "http://services-qa.aws.theladders.com/legacy/email-prefs/v1/by-id"
+                                                      :by-name "http://services-qa.aws.theladders.com/legacy/email-prefs/v1/by-name"
+                                                      :multi   "http://services-qa.aws.theladders.com/legacy/email-prefs/v1/by-id-multi"}
+                                    :email           "http://services-qa.aws.theladders.com/legacy/mail/v1/send"
+                                    :forward-email   {:initiate-forward   "http://qa-lambda.aws.theladders.com/ws/forward-email/initiate-forward-email"
+                                                      :recipient-override "recruiter-test@theladders.com"
+                                                      :email-name         "Jobseeker : Recruiter Message"}
+                                    :ats             {:get-settings  "http://qa-lambda.aws.theladders.com/ws/ats/get-ats-settings"
+                                                      :save-settings "http://qa-lambda.aws.theladders.com/ws/ats/save-ats-settings"}
+                                    :projects        {:project-view            "http://rashomon-qa.aws.theladders.com/modern/v1/query/project-view"
+                                                      :project-candidates-view "http://rashomon-qa.aws.theladders.com/modern/v1/query/project-candidates-view"
+                                                      :candidate-projects-view "http://rashomon-qa.aws.theladders.com/modern/v1/query/candidate-projects-view"}
+                                    :teams           {:read-all         "http://services-qa.aws.theladders.com/modern/recruiter-teams/v1"
+                                                      :read-one         "http://services-qa.aws.theladders.com/modern/recruiter-teams/v1"
+                                                      :read-by-name     "http://services-qa.aws.theladders.com/modern/recruiter-teams/v1/read-by-name"
+                                                      :create           "http://services-qa.aws.theladders.com/modern/recruiter-teams/v1/add-team"
+                                                      :update           "http://services-qa.aws.theladders.com/modern/recruiter-teams/v1/update-team"
+                                                      :delete           "http://services-qa.aws.theladders.com/modern/recruiter-teams/v1/delete-team"
+                                                      :add-admin        "http://services-qa.aws.theladders.com/modern/recruiter-teams/v1/add-admin"
+                                                      :remove-admin     "http://services-qa.aws.theladders.com/modern/recruiter-teams/v1/remove-admin"
+                                                      :add-recruiter    "http://services-qa.aws.theladders.com/modern/recruiter-teams/v1/add-recruiter"
+                                                      :remove-recruiter "http://services-qa.aws.theladders.com/modern/recruiter-teams/v1/remove-recruiter"}}
+ :emails                           {:verify-email    "Recruiter: Verify Email"
+                                    :forgot-password "Recruiter: Forgot Password"
+                                    :change-password "Recruiter: Change Password"
+                                    :pending-account "Recruiter: Pending Account"
+                                    :onboarding-drip "Recruiter: Onboarding"}
+ :interaction                      {:viewed    "recruiter-viewed-candidate-view?key="
+                                    :contacted "recruiter-emailed-candidate-view?key="}
+ :slack                            {:sales-full-access    "https://hooks.slack.com/services/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"
+                                    :recruiter-approvals  "https://hooks.slack.com/services/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"
+                                    :referral-hiring      "https://hooks.slack.com/services/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"
+                                    :sales-fa-pay-curtain "https://hooks.slack.com/services/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"}
+ :hubspot                          {:forms     {:full-access               {:portal-id 4276721
+                                                                            :guid      "7525ec48-3f22-4e79-bf95-e8f340a8ddd3"}
+                                                :pay-curtain               {:portal-id 4276721
+                                                                            :guid      "a3c4d60f-9cc1-40d4-8a94-915e242cbfa8"}
+                                                :pay-curtain-click         {:portal-id 4276721
+                                                                            :guid      "c6be0dee-1039-4efe-9634-87bf8d94fa1e"}
+                                                :approved-recruiters       {:portal-id 4276721
+                                                                            :guid      "297eeffc-b78e-4ea4-9c6e-cb2bb73f2784"}
+                                                :promotion-credit-purchase {:portal-id 4276721
+                                                                            :guid      "25584187-5428-40eb-adb9-a457c32a6a90"}}
+                                    :api-key   "204cd183-085e-4446-8ab8-030652be7856"
+                                    :endpoints {:read-forms  "https://api.hubapi.com/forms/v2/forms"
+                                                :submit-form "https://forms.hubspot.com/uploads/form/v2/%d/%s"}}
+ :lever                            {:base-url       "https://api.sandbox.lever.co/v1/users"
+                                    :base-api-url   "https://api.sandbox.lever.co/v1"
+                                    :save-candidate "/candidates"}
+ :greenhouse                       {:base-url       "https://api.greenhouse.io/oauth/authorize"
+                                    :secret         "hHoNuayzB6ECF4vDuPFA5nlGueC3drZ1FRydXLby"
+                                    :base-api-url   "https://api.greenhouse.io/v1/partner"
+                                    :save-candidate "/candidates"}
+ :workable                         {:base-api-url   "https://www.workablesandbox.com/spi/v3/accounts"
+                                    :save-candidate "/candidates"
+                                    :jobs           "/jobs"}
+ :lambda-server                    {:shopify-order-listener "http://qa-lambda.aws.theladders.com/ws/shopify/handle-webhook"}}

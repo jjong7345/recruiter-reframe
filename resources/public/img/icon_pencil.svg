@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="11px" height="12px" viewBox="0 0 11 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.6.1 (26313) - http://www.bohemiancoding.com/sketch -->
+    <title>Pencil Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Search-Results" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Recruiter---Desktop---Search---Advanced---Edit-Search-Name" transform="translate(-286.000000, -498.000000)" fill="#3FB2BB">
+            <g id="Advanced-Search-Area" transform="translate(0.000000, 50.000000)">
+                <g id="Bottom-Bar" transform="translate(140.000000, 325.000000)">
+                    <g id="Saved-Searches" transform="translate(0.000000, 19.000000)">
+                        <g id="Dropdown">
+                            <path d="M154.358836,104.830866 L147.272499,111.917049 L147.271428,111.917049 L147.271121,111.918274 L147.270815,111.918734 L147.271121,111.918734 L146,115.8301 L149.911673,114.559438 L149.911979,114.559438 L149.913051,114.558826 L149.912898,114.558519 L157,107.47157 L154.358836,104.830866 Z M147.802784,112.244592 L149.585968,114.027775 L146.944651,114.885755 L147.802784,112.244592 Z" id="Pencil-Icon"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
