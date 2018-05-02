@@ -91,6 +91,7 @@
                             :remove-member                 #(str "/teams/" %1 "/remove-recruiter")
                             :remove-admin                  #(str "/teams/" %1 "/remove-admin")
                             :team-summary                  #(str "/teams/team-summary-by-admin/" %1)
+                            :is-admin                      #(str "/teams/is-admin")
                             :team-search                   #(str "/teams/search")
                             :fetch-admin-note              #(str "/recruiters/fetch-admin-note/" %)
                             :create-admin-note             #(str "/recruiters/create-admin-note")

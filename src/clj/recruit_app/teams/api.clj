@@ -46,6 +46,10 @@
       keys
       first))
 
+(defn is-admin
+  [rec-id]
+  (str (some? (first-team-id-for-admin rec-id))))
+
 (defn team-dashboard-by-team-id
   "Returns team dashboard summary by team-id"
   [team-id]

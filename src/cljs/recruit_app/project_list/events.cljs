@@ -1,5 +1,5 @@
 (ns recruit-app.project-list.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [recruit-app.db :as db]
             [recruit-app.util.events :as ev]
             [recruit-app.util.job :as ju]
@@ -12,12 +12,12 @@
 
 (ev/reg-events "project-list" ["page-loaded?" "checked-candidates"])
 
-(rf/reg-event-fx
-  :project-list/load-view
-  (fn [{:keys [db]} _]
-    (let [active-project-id (-> db :projects :curr-project-id)]
-      {:dispatch-n [[:projects/get-candidates-data active-project-id]
-                    [:projects/get-projects-data]]})))
+(defn load-view
+  "Loads initial data for view"
+  [{:keys [db]} _]
+  (let [active-project-id (-> db :projects :curr-project-id)]
+    {:dispatch-n [[:projects/get-candidates-data active-project-id]
+                  [:projects/get-projects-data]]}))
 
 (defn remove-candidate-list
   "Iterates over ids and calls for deletion"
@@ -40,14 +40,18 @@
   {:dispatch-n [[:email/set-email-recipients (mapv p/email-candidate checked-candidates)]
                 [:email/togg-email-modal]]})
 
-(rf/reg-event-fx
+(events/reg-event-fx
+  :project-list/load-view
+  load-view)
+
+(events/reg-event-fx
   :project-list/back-to-all-projects
   back-to-all-projects)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :project-list/click-email-candidates
   click-email-candidates)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :project-list/remove-candidate-list
   remove-candidate-list)

@@ -1,7 +1,7 @@
 (ns recruit-app.search-results.events
   (:require [ajax.core :as ajax]
             [recruit-app.util.uri :as u]
-            [re-frame.core :as rf]
+            [recruit-app.events :as events]
             [recruit-app.util.events :as ev]
             [recruit-app.search.criteria :as criteria]
             [recruit-app.components.table :as table]))
@@ -162,58 +162,68 @@
   {:dispatch       [:search-results/show-minimum-criteria-error?-change true]
    :dispatch-later [{:ms 3000 :dispatch [:search-results/show-minimum-criteria-error?-change false]}]})
 
-(rf/reg-event-fx
+(defn clear-search-results
+  "Clears all search-results data in db and resets table"
+  [{:keys [db]}]
+  {:db       (dissoc db :search-results)
+   :dispatch [(table/reset-event ::table/search-results)]})
+
+(events/reg-event-fx
   :search-results/load-saved-search
   load-saved-search)
 
-(rf/reg-event-db
+(events/reg-event-db
   :search-results/set-search-criteria
   set-search-criteria)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search-results/cancel-filter-click
   cancel-filter-click)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search-results/apply-filter-click
   apply-filter-click)
 
-(rf/reg-event-db
+(events/reg-event-db
   :search-results/assoc-saved-search-id
   assoc-saved-search-id)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search-results/saved-search-id-change
   saved-search-id-change)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search-results/remove-filter
   remove-filter)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search-results/sort-by-change
   sort-by-change)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search-results/load-page
   load-page)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search-results/reset-table
   reset-table)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search-results/go-to-page
   go-to-page)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search-results/view-change
   view-change)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search-results/update-search-filters
   update-search-filters)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search-results/flash-minimum-criteria-error
   flash-minimum-criteria-error)
+
+(events/reg-event-fx
+  :search-results/clear-search-results
+  clear-search-results)

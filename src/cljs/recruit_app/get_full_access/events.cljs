@@ -1,5 +1,5 @@
 (ns recruit-app.get-full-access.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [recruit-app.db :as db]
             [day8.re-frame.http-fx]
             [ajax.core :as ajax]
@@ -36,18 +36,18 @@
   [_ _]
   {:route (u/uri :search)})
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :get-full-access/process-response
   process-response)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :get-full-access/submit
   submit)
 
-(rf/reg-event-db
+(events/reg-event-db
   :get-full-access/clear-db
   clear-db)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :get-full-access/on-confirmation-modal-btn-click
   on-confirmation-modal-btn-click)

@@ -14,11 +14,7 @@
             [recruit-app.util.img :as img]
             [recruit-app.components.typography :as type]
             [recruit-app.components.modal :as modal]
-            [recruit-app.modals.full-access.views :as fa-modal]
-            [recruit-app.components.hyperlink :as link]
-            [recruit-app.components.button :as btn]
-            [recruit-app.components.form :as form]
-            [recruit-app.components.layout :as layout]))
+            [recruit-app.modals.full-access.views :as fa-modal]))
 
 (def headline-text "Get Full Access")
 (def sub-headline-text "Our new product suite helps you find the right candidates in less time.")
@@ -153,24 +149,20 @@
 
 (defn submit-btn
   []
-  [layout/column
+  [re/button
    :class "submit-btn"
-   :padding 0
-   :children [[btn/primary-transaction-button-large
-               :class "submit-btn"
-               :label "Contact Sales"
-               :on-click #(on-submit)]]])
+   :label "Contact Sales"
+   :on-click #(on-submit)])
 
 (defn contact-sales-form
   []
-  [layout/column
-   :padding 20
+  [re/v-box
    :class "contact-sales-form"
    :children (conj (into [] (map render-row form-rows)) [submit-btn])])
 
 (defn info-title
   []
-  [layout/column
+  [re/v-box
    :class "info-title"
    :children [[:div info-title-text]]])
 
@@ -215,15 +207,13 @@
 
 (defn legal-holder
   []
-  [layout/column
+  [re/h-box
    :class "legal-holder"
-   :children [[layout/row
-               :justify :between
-               :children [(legal-text "Terms of Use" terms-of-use-url)
-                          [legal-divider]
-                          (legal-text "Privacy" privacy-url)
-                          [legal-divider]
-                          (legal-text (str (str-util/unescapeEntities "&copy; ") (current-year) " Ladders Recruiter"))]]]])
+   :children [(legal-text "Terms of Use" terms-of-use-url)
+              [legal-divider]
+              (legal-text "Privacy" privacy-url)
+              [legal-divider]
+              (legal-text (str (str-util/unescapeEntities "&copy; ") (current-year) " Ladders Recruiter"))]])
 
 (defn legal
   []
@@ -234,7 +224,7 @@
 (defn body
   []
   (fn []
-    [layout/column
+    [re/v-box
      :class "body"
      :children [[headline] [sub-headline] [form-box] [legal]]]))
 
@@ -271,7 +261,7 @@
   []
   (let [confirmation-page? (rf/subscribe [:get-full-access/confirmation-page?])]
    (fn []
-       [layout/column
+       [re/v-box
         :class "get-full-access main content-holder"
         :children [[header]
                    (when @confirmation-page? [confirmation-message])

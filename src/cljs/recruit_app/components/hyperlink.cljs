@@ -31,10 +31,12 @@
 
 (defn hyperlink-href-medium
   "Renders re-com hyperlink-href with proper styles"
-  [& {:keys [label href]}]
+  [& {:keys [label href on-click]}]
   [:a
    (merge
-     {:href href}
+     (cond
+       href {:href href}
+       on-click {:on-click on-click})
      (use-style styles/hyperlink-14))
    label])
 

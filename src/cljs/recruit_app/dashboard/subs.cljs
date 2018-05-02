@@ -7,7 +7,7 @@
             [recruit-app.util.dashboard :as da]))
 
 (rs/reg-subs "dashboard" [["education-dataset" nil] ["experience-dataset" nil] ["salary-dataset" nil]
-                          ["dashboard-data" nil] ["is-fetching?" true] ["team-summary-data" nil]])
+                          ["dashboard-data" nil] ["is-fetching?" true] ["team-summary-data" nil] ["is-admin?" false] ["loading-team-summary?" false]])
 
 (def education-ranges
   "list of education degrees for education chart"
@@ -210,8 +210,9 @@
         first-item (first dataset)]
     (and (= 1 (count dataset)) (= "Unknown" (:label first-item)))))
 
+
 (defn team-members
-  "Return team member data"
+  "Return team members data"
   [team-summary-data _]
   (mapv (fn[{:keys [recruiter-name engagement job-stats usage]}]
           [recruiter-name

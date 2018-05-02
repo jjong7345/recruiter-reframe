@@ -1,5 +1,5 @@
 (ns recruit-app.resume.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [ajax.core :as ajax]
             [recruit-app.util.uri :as u]
             [cognitect.transit :as t]
@@ -58,26 +58,26 @@
                    :on-success      [:http-no-on-success]
                    :on-failure      [:http-no-on-failure]}})
 
-(rf/reg-event-db
+(events/reg-event-db
   :resume/add-metadata
   add-metadata)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :resume/resume-metadata-success
   resume-metadata-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :resume/resume-metadata-failure
   resume-metadata-failure)
 
-(rf/reg-event-db
+(events/reg-event-db
   :resume/add-to-metadata-fetched
   add-to-metadata-fetched)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :resume/get-resume-metadata
   get-resume-metadata)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :resume/resume-downloaded
   resume-downloaded)

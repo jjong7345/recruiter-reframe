@@ -3,7 +3,8 @@
             [clojure.string :as string]
             [recruit-app.specs.common :as common]))
 
-(def not-blank? (complement string/blank?))
-(s/def ::team-name (and string? not-blank?))
+(s/def ::team-name (and string? common/not-blank?))
 (s/def ::email common/email?)
-(s/def ::team (s/keys :req-un [::team-name ::email]))
+(s/def ::new-team (s/keys :req-un [::team-name ::email]))
+
+(s/def ::teams (s/keys :opt-un []))

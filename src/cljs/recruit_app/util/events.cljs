@@ -1,5 +1,5 @@
 (ns recruit-app.util.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [clojure.string :as string]))
 
 (defn reg-events
@@ -30,7 +30,7 @@
         keypath (butlast args)]
     (doseq [type events]
       (let [nested-keypath (string/join "-" keypath)]
-        (rf/reg-event-db
+        (events/reg-event-db
           (keyword ns (str (when (seq nested-keypath) (str nested-keypath "-")) type "-change"))
           (fn [db [_ val]]
             (assoc-in
@@ -40,7 +40,7 @@
 
 (defn reg-toggle-event
   [ns type]
-  (rf/reg-event-db
+  (events/reg-event-db
     (keyword ns (str "toggle-" type))
     (fn [db _]
       (->> (get-in db [(keyword ns) (keyword type)])

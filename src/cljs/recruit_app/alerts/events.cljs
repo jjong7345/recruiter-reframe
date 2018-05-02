@@ -1,5 +1,5 @@
 (ns recruit-app.alerts.events
-  (:require [re-frame.core :as rf]))
+  (:require [recruit-app.events :as events]))
 
 (defn add-success
   [_ [_ msg]]
@@ -29,18 +29,18 @@
   [db [_ type]]
   (update-in db [:alerts type] remove-first-element))
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :alerts/add-success
   add-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :alerts/add-error
   add-error)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :alerts/add-alert
   add-alert)
 
-(rf/reg-event-db
+(events/reg-event-db
   :alerts/remove-oldest-alert
   remove-oldest-alert)

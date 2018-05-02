@@ -1,6 +1,8 @@
 (ns recruit-app.specs.common
   (:require #?(:clj [clojure.spec.alpha :as s]
                :cljs [cljs.spec.alpha :as s])
+            #?(:clj [clj-time.coerce :as coerce]
+               :cljs [cljs-time.coerce :as coerce])
                     [clojure.string :as cs]))
 
 (def email-regex #"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$")
@@ -38,6 +40,29 @@
       (let [local-number (local-number number-str)
             prefix (subs local-number 0 3)]
         (valid-prefix? prefix)))))
+
+;; GUIDs
+
+(def guid-regex #"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
+
+(def valid-guid? (partial re-matches guid-regex))
+
+;; Utility Functions
+
+(defn empty-map?
+  [m]
+  (and (map? m) (empty? m)))
+
+(defn datetime-string?
+  "Predicate to determine if given string is datetime string"
+  [s]
+  (try
+    (when (coerce/from-string s)
+      true)
+    (catch #?(:clj Exception
+              :cljs :default)
+           e
+      false)))
 
 ;; Creating predicate in case we ever change the handling
 (def recruiter-id? pos-int?)

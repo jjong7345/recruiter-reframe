@@ -11,13 +11,23 @@
    layout/column
    [:padding 0
     :class "box-header"
-    :children [[layout/row-top
+    :children [[layout/wrapping-row
+                :padding-top 0
                 :padding-bottom 10
                 :justify justify
                 :align :end
-                :children [[header/header-4 label]
-                           (when right right)]]]]
-   styles])
+                :children [[layout/col-left
+                            :padding 0
+                            :class (if right
+                                     "col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                                     "col-xs-12")
+                            :children [[header/header-4 label]]]
+                           (when right
+                             [layout/col-right
+                              :padding 0
+                              :class "col-xs-12 col-sm-12 col-md-6 col-lg-6"
+                              :children [right]])]]]]
+   styles/box-header])
 
 (defn box-header
   [& params]

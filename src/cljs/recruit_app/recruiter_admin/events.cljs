@@ -1,6 +1,6 @@
 (ns recruit-app.recruiter-admin.events
   (:require [recruit-app.util.events :as ev]
-            [re-frame.core :as rf]
+            [recruit-app.events :as events]
             [recruit-app.util.uri :as u]
             [ajax.core :as ajax]
             [recruit-app.util.ajax :as a]
@@ -446,218 +446,218 @@
   {:db (update db :recruiter-admin dissoc :recently-viewed)
    :ls ["recently-viewed" nil]})
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/clear-db
   clear-db)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/fetch-pending-recruiters
   fetch-pending-recruiters)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/fetch-pending-escalated-recruiters
   fetch-pending-escalated-recruiters)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/fetch-recently-approved-recruiters
   fetch-recently-approved-recruiters)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/fetch-pending-recruiters-success
   fetch-pending-recruiters-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/fetch-pending-escalated-recruiters-success
   fetch-pending-escalated-recruiters-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/fetch-recently-approved-recruiters-success
   fetch-recently-approved-recruiters-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/fetch-recruiter
   fetch-recruiter)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/fetch-recruiter-success
   fetch-recruiter-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/fetch-recruiter-failure
   fetch-recruiter-failure)
 
-(rf/reg-event-db
+(events/reg-event-db
   :recruiter-admin/clear-active-recruiter
   clear-active-recruiter)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/approve-recruiter
   approve-recruiter)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/approve-recruiter-success
   approve-recruiter-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/approve-recruiter-failure
   approve-recruiter-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/escalate-recruiter
   escalate-recruiter)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/escalate-recruiter-success
   escalate-recruiter-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/escalate-recruiter-failure
   escalate-recruiter-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/decline-recruiter
   decline-recruiter)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/decline-recruiter-success
   decline-recruiter-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/decline-recruiter-failure
   decline-recruiter-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/permanently-decline-recruiter
   permanently-decline-recruiter)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/permanently-decline-recruiter-success
   permanently-decline-recruiter-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/permanently-decline-recruiter-failure
   permanently-decline-recruiter-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/send-verify-email
   send-verify-email)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/send-password-email
   send-password-email)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/send-verify-success
   send-verify-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/send-password-success
   send-password-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/send-email-failure
   send-email-failure)
 
-(rf/reg-event-db
+(events/reg-event-db
   :recruiter-admin/editing-recruiter-role-id-change
   editing-recruiter-role-id-change)
 
-(rf/reg-event-db
+(events/reg-event-db
   :recruiter-admin/editing-recruiter-job-function-id-change
   editing-recruiter-job-function-id-change)
 
-(rf/reg-event-db
+(events/reg-event-db
   :recruiter-admin/editing-recruiter-paid-membership-start-date-change
   editing-recruiter-paid-membership-start-date-change)
 
-(rf/reg-event-db
+(events/reg-event-db
   :recruiter-admin/editing-recruiter-paid-membership-end-date-change
   editing-recruiter-paid-membership-end-date-change)
 
-(rf/reg-event-db
+(events/reg-event-db
   :recruiter-admin/assoc-recruiter
   assoc-recruiter)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/back-to-pending-click
   back-to-pending-click)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/back-to-pending-escalated-click
   back-to-pending-escalated-click)
 
-(rf/reg-event-fx
+(events/reg-event-db
   :recruiter-admin/back-to-approved-recently-click
   back-to-recently-approved-click)
 
-(rf/reg-event-db
+(events/reg-event-db
   :recruiter-admin/clear-recruiter-profile-data
   clear-recruiter-profile-data)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/save-recruiter
   save-recruiter)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/save-recruiter-success
   save-recruiter-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/save-recruiter-failure
   save-recruiter-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/editing-recruiter-superuser-checked?-change
   editing-recruiter-superuser-checked?-change)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/sort-pending-recruiters
   sort-pending-recruiters)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/recruiter-click
   recruiter-click)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/sort-pending-escalated-recruiters
   sort-pending-escalated-recruiters)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/fetch-admin-note
   fetch-admin-note)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/fetch-admin-note-success
   fetch-admin-note-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/save-admin-note
   save-admin-note)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/save-admin-note-success
   save-admin-note-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/save-admin-note-failure
   save-admin-note-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/load-recently-viewed
   load-recently-viewed)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/add-to-recently-viewed
   add-to-recently-viewed)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/clear-recently-viewed
   clear-recently-viewed)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/newly-approved-recruiter
   newly-approved-recruiter)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter-admin/newly-approved-recruiter-failure
   newly-approved-recruiter-failure)

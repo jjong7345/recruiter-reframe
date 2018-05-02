@@ -1,6 +1,6 @@
 (ns recruit-app.modals.confirm-email.events
   (:require [recruit-app.util.events :as ev]
-            [re-frame.core :as rf]
+            [recruit-app.events :as events]
             [recruit-app.util.uri :as u]
             [ajax.core :as ajax]
             [cljs.reader :as edn]
@@ -69,30 +69,30 @@
     {:dispatch [:login/email-exists-reroute (-> db :confirm-email :email)]}
     {:dispatch [::modal/open-modal ::modal/create-account]}))
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :confirm-email/submit-success
   submit-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :confirm-email/submit-failure
   submit-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :confirm-email/submit
   submit)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :confirm-email/email-exists?
   email-exists?)
 
-(rf/reg-event-db
+(events/reg-event-db
   :confirm-email/email-exists-success
   email-exists-success)
 
-(rf/reg-event-db
+(events/reg-event-db
   :confirm-email/email-exists-failure
   email-exists-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :confirm-email/click-button-unauthenticated
   click-button-unauthenticated)

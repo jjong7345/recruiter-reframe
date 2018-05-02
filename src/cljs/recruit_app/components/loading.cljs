@@ -39,6 +39,12 @@
    :class class
    :styles styles/loading-circle-large])
 
+(defn loading-circle-component?
+  [loading-circle-component]
+  (or (= loading-circle-component loading-circle-tiny)
+      (= loading-circle-component loading-circle-small)
+      (= loading-circle-component loading-circle-large)))
+
 (defn primary-button-loader
   []
   [loading-circle

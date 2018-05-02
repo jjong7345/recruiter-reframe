@@ -1,5 +1,5 @@
 (ns recruit-app.post-job.publish.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [recruit-app.db :as db]
             [ajax.core :as ajax]
             [cljs.reader :as edn]
@@ -37,18 +37,18 @@
   [db _]
   (dissoc db :post-job.publish))
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :post-job.publish/load-view
   load-view)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :post-job.publish/promote-from-publish
   promote-from-publish)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :post-job.publish/thank-you-passhthru
   thank-you-passthru)
 
-(rf/reg-event-db
+(events/reg-event-db
   :post-job.publish/clear-db
   clear-db)

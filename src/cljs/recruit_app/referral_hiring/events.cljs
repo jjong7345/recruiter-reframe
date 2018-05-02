@@ -1,13 +1,13 @@
 (ns recruit-app.referral-hiring.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [recruit-app.db :as db]
-            [recruit-app.util.events :as re]
+            [recruit-app.util.events :as ev]
             [recruit-app.util.uri :as u]
             [ajax.core :as ajax]
             [recruit-app.components.modal :as modal]))
 
-(re/reg-toggle-event "referral-hiring" "read-more?")
-(re/reg-events "referral-hiring" ["show-errors?" "fullname" "email" "company" "referral"])
+(ev/reg-toggle-event "referral-hiring" "read-more?")
+(ev/reg-events "referral-hiring" ["show-errors?" "fullname" "email" "company" "referral"])
 
 (defn new-referral
   [recruiter]
@@ -36,15 +36,15 @@
                    :on-success      [:referral-hiring/submit-referral-success]
                    :on-failure      [:http-no-on-failure]}})
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :referral-hiring/submit-referral
   submit-referral)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :referral-hiring/submit-referral-success
   submit-referral-success)
 
-(rf/reg-event-db
+(events/reg-event-db
   :referral-hiring/set-referral-data
   set-referral-data)
 

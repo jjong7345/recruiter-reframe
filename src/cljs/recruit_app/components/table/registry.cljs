@@ -1,5 +1,6 @@
 (ns recruit-app.components.table.registry
   (:require [re-frame.core :as rf]
+            [recruit-app.events :as events]
             [recruit-app.components.table :as table]))
 
 ;; Subs
@@ -86,22 +87,22 @@
   [db [_ table-key]]
   (registered db table-key ::table/actions-registered?))
 
-(rf/reg-event-db
+(events/reg-event-db
   ::table/pagination-registered
   pagination-registered)
 
-(rf/reg-event-db
+(events/reg-event-db
   ::table/sortable-registered
   sortable-registered)
 
-(rf/reg-event-db
+(events/reg-event-db
   ::table/backend-pagination-registered
   backend-pagination-registered)
 
-(rf/reg-event-db
+(events/reg-event-db
   ::table/frontend-pagination-registered
   frontend-pagination-registered)
 
-(rf/reg-event-db
+(events/reg-event-db
   ::table/actions-registered
   actions-registered)

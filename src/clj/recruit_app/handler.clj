@@ -81,24 +81,28 @@
 
 (defroutes rl-redirect-routes
            (GET "/home" req (rr/redirect (str (:host env) "/")))
-           (GET "/forgotpasswordlink" req (rr/redirect (str (:host env) "/#/change-password/" (u/url-encode (-> req :params :token)))))
-           (GET "/login/" req (rr/redirect (str (:host env) "/#/login")))
            (GET "/login" req (rr/redirect (str (:host env) "/#/login")))
-           (GET "/managejobs" req (rr/redirect (str (:host env) "/#/jobs")))
-           (GET "/managejobs/:job-id" [job-id] (rr/redirect (str (:host env) "/#/job/" job-id)))
-           (GET "/search" req (rr/redirect (str (:host env) "/#/search")))
-           (GET "/search/" req (rr/redirect (str (:host env) "/#/search")))
-           (GET "/search/managesavedsearches" req (rr/redirect (str (:host env) "/#/saved-searches")))
-           (GET "/newjob/postjob" req (rr/redirect (str (:host env) "/#/post-job")))
-           (GET "/managejob/new" req (rr/redirect (str (:host env) "/#/post-job")))
-           (GET "/managecandidates" req (rr/redirect (str (:host env) "/#/projects")))
+           (GET "/hiring-candidates-FAQ" req (rr/redirect (str (:host env) "/#/faqs")))
+           (GET "/guest/resumeviewer" [jobseekerId] (rr/redirect (str (:host env) "/#/candidates?jobseekerId=" jobseekerId))))
+
+(defroutes email-redirect-routes
            (GET "/recruiterprofile/myprofile" req (rr/redirect (str (:host env) "/#/account")))
            (GET "/recruiterprofile/communicationpreferences" req (rr/redirect (str (:host env) "/#/account/subscriptions")))
-           (GET "/hiring-candidates-FAQ" req (rr/redirect (str (:host env) "/#/faqs")))
+           (GET "/managejob/new" req (rr/redirect (str (:host env) "/#/post-job")))
+           (GET "/login/" req (rr/redirect (str (:host env) "/#/login")))
+           (GET "/forgotpasswordlink" req (rr/redirect (str (:host env) "/#/change-password/" (u/url-encode (-> req :params :token)))))
            (GET "/landing/" req (rr/redirect (str (:host env) "/#/get-full-access")))
-           (GET "/guest/resumeviewer" [jobseekerId] (rr/redirect (str (:host env) "/#/candidates?jobseekerId=" jobseekerId)))
            (GET "/resumeviewer" [jobseekerId jobLocationId] (rr/redirect (str (:host env) "/#/candidates?jobseekerId=" jobseekerId (when jobLocationId (str "&jobLocationId=" jobLocationId)))))
-           (GET "/passport/directverify" [optinKey] (rr/redirect (str (:host env) "/verify/" optinKey))))
+           (GET "/search" req (rr/redirect (str (:host env) "/#/search")))
+           (GET "/search/" req (rr/redirect (str (:host env) "/#/search")))
+           (GET "/newjob/postjob" req (rr/redirect (str (:host env) "/#/post-job")))
+           (GET "/passport/directverify" [optinKey] (rr/redirect (str (:host env) "/verify/" optinKey)))
+           (GET "/search/managesavedsearches" req (rr/redirect (str (:host env) "/#/saved-searches")))
+           (GET "/sharedresumeviewer" [key jobseekerId] (rr/redirect (str (:host env) "/?key=" key "#/candidates?jobseekerId=" jobseekerId)))
+           (GET "/managecandidates" req (rr/redirect (str (:host env) "/#/projects")))
+           (GET "/managejobs" req (rr/redirect (str (:host env) "/#/jobs")))
+           (GET "/managejobs/:job-id" [job-id] (rr/redirect (str (:host env) "/#/job/" job-id)))
+           (GET "/savedsearch/:search-id" [search-id] (rr/redirect (str (:host env) "/#/search-results/" search-id))))
 
 (defroutes secured-routes
            (context "/jobs" []
@@ -159,6 +163,7 @@
              (GET "/greenhouse" [] (ats/get-greenhouse-url))
              (GET "/jobs" req (ats/jobs (-> req :params :recruiter-id))))
            (context "/teams" []
+             (GET "/is-admin" req (teams/is-admin (-> req :params :recruiter-id)))
              (GET "/team-summary-by-admin/:rec-id" [rec-id] (teams/team-dashboard-by-admin-id (Integer. rec-id)))
              (GET "/team-summary-by-team/:team-id" [team-id] (teams/team-dashboard-by-team-id team-id)))
            (POST "/pay-curtain-click" req (sl/submit-full-access-recruiter-info :pay-curtain-click nil (r/recruiter-id req)))
@@ -221,6 +226,7 @@
                mw/wrap-recruiter-id
                wrap-json-response)
            rl-redirect-routes
+           email-redirect-routes
            (-> secured-routes
                mw/wrap-recruiter-id
                (wrap-routes sec/wrap-authentication)

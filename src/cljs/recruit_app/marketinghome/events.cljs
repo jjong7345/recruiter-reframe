@@ -1,5 +1,5 @@
 (ns recruit-app.marketinghome.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [recruit-app.db :as db]
             [day8.re-frame.http-fx]
             [secretary.core :as sec]
@@ -79,30 +79,30 @@
   [db _]
   (dissoc db :marketinghome))
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :marketinghome/submit-email-success
   submit-email-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :marketinghome/submit-email-failure
   submit-email-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :marketinghome/submit-email
   submit-email)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :marketinghome/email-exists-success
   email-exists-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :marketinghome/email-exists-failure
   email-exists-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :marketinghome/onboarding
   email-exists)
 
-(rf/reg-event-db
+(events/reg-event-db
   :marketinghome/clear-form
   clear-form)

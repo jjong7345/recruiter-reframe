@@ -1,5 +1,5 @@
 (ns recruit-app.onboarding.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [recruit-app.db :as db]
             [day8.re-frame.http-fx]
             [secretary.core :as sec]
@@ -109,38 +109,38 @@
   {:dispatch-n [[:onboarding/show-errors?-change true]
                 [:onboarding/show-password-hint?-change true]]})
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :onboarding/password-change
   password-change)
 
-(rf/reg-event-db
+(events/reg-event-db
   :onboarding/clear-form
   clear-form)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :onboarding/process-response-success
   process-response-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :onboarding/process-preapproved-response-success
   process-preapproved-response-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :onboarding/process-response-fail
   process-response-fail)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :onboarding/submit-register
   submit-register)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :onboarding/submit-preapproved
   submit-preapproved)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :onboarding/go-to-passport-verify
   go-to-passport-verify)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :onboarding/submit-failure
   submit-failure)

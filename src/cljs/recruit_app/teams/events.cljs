@@ -1,5 +1,5 @@
 (ns recruit-app.teams.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [recruit-app.util.uri :as u]
             [ajax.core :as ajax]
             [recruit-app.util.ajax :as a]
@@ -356,166 +356,166 @@
   {:dispatch-n [[:teams/remove-team-change team]
                 [::modal/open-modal ::modal/remove-team]]})
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/load-view
   load-view)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/load-team-view
   load-team-view)
 
-(rf/reg-event-db
+(events/reg-event-db
   :teams/clear-db
   clear-db)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/fetch-team
   fetch-team)
 
-(rf/reg-event-db
+(events/reg-event-db
   :teams/fetch-team-success
   fetch-team-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/fetch-team-failure
   fetch-team-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/add-member
   add-member)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/add-member-success
   add-member-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/add-member-failure
   add-member-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/make-admin
   make-admin)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/make-admin-success
   make-admin-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/make-admin-failure
   make-admin-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/add-admin-by-email
   add-admin-by-email)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/add-admin-success
   add-admin-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/add-admin-failure
   add-admin-failure)
 
-(rf/reg-event-db
+(events/reg-event-db
   :teams/clear-new-member-form
   clear-new-member-form)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/remove-admin
   remove-admin)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/remove-admin-success
   remove-admin-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/remove-admin-failure
   remove-admin-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/remove-member
   remove-member)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/remove-member-success
   remove-member-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/remove-member-failure
   remove-member-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/create-team
   create-team)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/create-team-success
   create-team-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/create-team-failure
   create-team-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/edit-team
   edit-team)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/edit-team-success
   edit-team-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/edit-team-failure
   edit-team-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/close-create-team-modal
   close-create-team-modal)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/remove-team
   remove-team)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/remove-team-success
   remove-team-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/remove-team-failure
   remove-team-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/search
   search)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/search-success
   search-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/search-failure
   search-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/new-team-email-change
   new-team-email-change)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/clear-search
   clear-search)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/edit-member-click
   edit-member-click)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/remove-member-click
   remove-member-click)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/edit-team-click
   edit-team-click)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :teams/remove-team-click
   remove-team-click)

@@ -1,5 +1,5 @@
 (ns recruit_app.jobs.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [recruit-app.db :as db]
             [ajax.core :as ajax]
             [cljs.reader :as edn]
@@ -229,98 +229,98 @@
     merge-job
     job))
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/load-view
   load-view)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/process-response
   process-response)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/process-pending-promoted
   process-pending-promoted)
 
-(rf/reg-event-db
+(events/reg-event-db
   :jobs/update-pending-promoted
   update-pending-promoted)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/get-jobs
   get-jobs)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/get-pending-promoted
   get-pending-promoted)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/purchase-promotions
   purchase-promotions)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/promote-job-modal
   promote-job-modal)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/close-promote-job-modal
   close-promote-job-modal)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/close-remove-job-modal
   close-remove-job-modal)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/promote-job-success
   promote-job-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/promote-job-failure
   promote-job-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/promote-job
   promote-job)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/edit-job
   edit-job)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/edit
   edit)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/remove-job-success
   remove-job-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/remove-job-failure
   remove-job-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/remove-job
   remove-job)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/remove-job-click
   remove-job-click)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/repost-job-success
   repost-job-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/repost-job
   repost-job)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :jobs/repost-job-failure
   repost-job-failure)
 
-(rf/reg-event-db
+(events/reg-event-db
   :jobs/assoc-new-job
   assoc-new-job)
 
-(rf/reg-event-db
+(events/reg-event-db
   :jobs/merge-updated-job
   merge-updated-job)

@@ -1,7 +1,6 @@
 (ns recruit_app.pricing.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [recruit-app.db :as db]
-            [recruit-app.util.events :as re]
             [cljs.reader :as edn]
             [ajax.core :as ajax]
             [recruit-app.util.uri :as u]
@@ -38,22 +37,22 @@
                    :on-success      [:pricing/enterprise-click-success]
                    :on-failure      [:pricing/enterprise-click-fail]}})
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :pricing/get-started
   get-started)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :pricing/go-to-sign-up
   go-to-sign-up)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :pricing/enterprise-click-success
   enterprise-click-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :pricing/enterprise-click-fail
   enterprise-click-fail)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :pricing/enterprise-click
   enterprise-click)

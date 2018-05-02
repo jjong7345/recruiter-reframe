@@ -1,15 +1,15 @@
 (ns recruit-app.recruiter.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [recruit-app.db :as db]
             [recruit-app.post-job.db :as pj-db]
             [ajax.core :as ajax]
             [cljs.reader :as edn]
             [cljs.spec.alpha :as s]
-            [recruit-app.util.events :as re]
+            [recruit-app.util.events :as ev]
             [clojure.walk :as w]
             [recruit-app.util.uri :as u]))
 
-(re/reg-events "recruiter" ["profile-img-last-update" "has-photo?"
+(ev/reg-events "recruiter" ["profile-img-last-update" "has-photo?"
                             "profile-status" "email-confirmed?" "ats-provider"])
 
 (defn go-to-account-settings
@@ -32,18 +32,18 @@
   [db _]
   (update-in db [:recruiter :pjl-count] dec))
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter/go-to-account-settings
   go-to-account-settings)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter/go-to-ats-settings
   go-to-ats-settings)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :recruiter/go-to-profile
   go-to-profile)
 
-(rf/reg-event-db
+(events/reg-event-db
   :recruiter/decrement-promoted-job-count
   decrement-promoted-job-count)

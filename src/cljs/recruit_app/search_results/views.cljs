@@ -340,7 +340,7 @@
                                            :children [[form/form-label
                                                        :label "Sort By:"]]]
                                           [sort-dropdown]]]]]
-                  [layout/wrapping-row
+                  [layout/wrapping-row-with-children
                    :padding 0
                    :children (mapv (partial vector filter-option) removable-filter-subs)]
                   [layout/row-bottom

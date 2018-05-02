@@ -1,5 +1,5 @@
 (ns recruit-app.projects.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [recruit-app.db :as db]
             [recruit-app.util.events :as ev]
             [ajax.core :as ajax]
@@ -300,162 +300,162 @@
                 [:projects/show-errors?-change false]
                 [:projects/editing-project-change nil]]})
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/load-view
   load-view)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/add-project-success
   add-project-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/add-project-failure
   add-project-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/add-project
   add-project)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/on-add-project
   on-add-project)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/handle-projects-data
   handle-projects-data)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/handle-candidates-data
   handle-candidates-data)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/get-projects-failure
   get-projects-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/get-projects-data
   get-projects-data)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/get-candidates-data
   get-candidates-data)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/get-candidates-failure
   get-candidates-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/edit-project-success
   edit-project-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/edit-project-failure
   edit-project-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/edit-project
   edit-project)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/delete-project-success
   delete-project-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/delete-project-failure
   delete-project-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/delete-project
   delete-project)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/add-candidate-to-project
   add-candidate-to-project)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/add-candidate-success
   add-candidate-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/add-candidate-failure
   add-candidate-failure)
 
-(rf/reg-event-db
+(events/reg-event-db
   :projects/add-candidate-project
   add-candidate-project)
 
-(rf/reg-event-db
+(events/reg-event-db
   :projects/increment-candidate-count
   increment-candidate-count)
 
-(rf/reg-event-db
+(events/reg-event-db
   :projects/decrement-candidate-count
   decrement-candidate-count)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/open-save-candidate-modal
   open-save-candidate-modal)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/remove-candidate-from-project
   remove-candidate-from-project)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/remove-candidate-success
   remove-candidate-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/remove-candidate-failure
   remove-candidate-failure)
 
-(rf/reg-event-db
+(events/reg-event-db
   :projects/remove-candidate-project
   remove-candidate-project)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/fetch-projects-for-candidate
   fetch-projects-for-candidate)
 
-(rf/reg-event-db
+(events/reg-event-db
   :projects/projects-for-candidate-success
   projects-for-candidate-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/projects-for-candidate-failure
   projects-for-candidate-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/click-project
   click-project)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/click-candidate
   click-candidate)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/remove-candidate-from-list
   remove-candidate-from-list)
 
-(rf/reg-event-db
+(events/reg-event-db
   :projects/add-to-disabled-projects
   add-to-disabled-projects)
 
-(rf/reg-event-db
+(events/reg-event-db
   :projects/remove-from-disabled-projects
   remove-from-disabled-projects)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/open-edit-modal
   open-edit-modal)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/open-delete-modal
   open-delete-modal)
 
-(rf/reg-event-db
+(events/reg-event-db
   :projects/clear-project-form
   clear-project-form)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :projects/close-modal
   close-modal)

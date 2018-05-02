@@ -1,6 +1,6 @@
 (ns recruit-app.modals.ats-select-job.events
   (:require [recruit-app.util.events :as ev]
-            [re-frame.core :as rf]
+            [recruit-app.events :as events]
             [ajax.core :as ajax]
             [recruit-app.util.uri :as u]
             [recruit-app.components.modal :as modal]))
@@ -41,22 +41,22 @@
     {:dispatch-n [[:candidates/export-to-ats secure-id job-id]
                   [::modal/close-modal ::modal/ats-select-job]]}))
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :ats-select-job/open-modal
   open-modal)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :ats-select-job/load-job-options
   load-job-options)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :ats-select-job/load-job-options-success
   load-job-options-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :ats-select-job/job-id-change
   job-id-change)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :ats-select-job/submit
   submit)

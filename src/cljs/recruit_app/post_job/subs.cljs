@@ -35,8 +35,8 @@
 
 (defn compensation-not-valid?
   "Checks for valid compensation"
-  [[min-comp max-total-comp] _]
-  (and (> min-comp 0) (< max-total-comp 80)))
+  [[min-comp min-total-comp] _]
+  (and (> min-comp 0) (< min-total-comp 80000)))
 
 (defn salary-label
   "Returns the correct Salary label, DOE or the salary range"
@@ -103,7 +103,7 @@
 (rf/reg-sub
   :post-job/compensation-not-valid?
   :<- [:post-job/min-comp]
-  :<- [:post-job/max-total-comp]
+  :<- [:post-job/min-total-comp]
   compensation-not-valid?)
 
 (rf/reg-sub

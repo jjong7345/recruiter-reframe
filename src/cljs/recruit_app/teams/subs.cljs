@@ -46,7 +46,7 @@
 (defn team-valid?
   "Validates new team map against spec"
   [team _]
-  (s/valid? ::db/team team))
+  (s/valid? ::db/new-team team))
 
 (rf/reg-sub
   :teams/teams-list

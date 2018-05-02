@@ -1,5 +1,5 @@
 (ns recruit-app.login.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [recruit-app.db :as db]
             [ajax.core :as ajax]
             [clojure.string :as cs]
@@ -165,82 +165,82 @@
                 [:login/show-onboarding-message?-change true]
                 [:go-to-login]]})
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/password-change
   password-change)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/confirm-password-change
   confirm-password-change)
 
-(rf/reg-event-db
+(events/reg-event-db
   :login/clear-form
   clear-form)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/login-failure
   login-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/login-success
   login-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/logout-failure
   logout-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/logout-success
   logout-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/do-login
   login)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/logout
   logout)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/show-login-form
   show-login-form)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/send-forgot-password-email
   send-forgot-password-email)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/forgot-password-success
   forgot-password-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/forgot-password-failure
   forgot-password-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/change-password
   change-password)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/change-password-failure
   change-password-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/change-password-success
   change-password-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/create-account
   create-account)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/create-account-click
   create-account-click)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/forgot-password-click
   forgot-password-click)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :login/email-exists-reroute
   email-exists-reroute)

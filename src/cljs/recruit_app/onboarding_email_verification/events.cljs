@@ -1,5 +1,5 @@
 (ns recruit-app.onboarding-email-verification.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [recruit-app.db :as db]
             [recruit-app.util.events :as ev]
             [ajax.core :as ajax]
@@ -61,26 +61,26 @@
                    :on-success      [:email-verification/code-valid-success]
                    :on-failure      [:email-verification/code-valid-failure]}})
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :email-verification/re-send-email
   re-send-email)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :email-verification/re-send-email-success
   re-send-email-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :email-verification/re-send-email-failure
   re-send-email-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :email-verification/code-valid-success
   code-valid-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :email-verification/code-valid-failure
   code-valid-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :email-verification/verify
   verification-code-valid?)

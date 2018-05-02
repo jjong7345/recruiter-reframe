@@ -35,9 +35,9 @@
 
 (defn saved-search-row
   [_ {:keys [search-id search-name update-time] :as saved-search}]
-  [[link/table-cell-hyperlink-href
+  [[link/table-cell-hyperlink
     :label search-name
-    :href (str "/#/search-results/" search-id)]
+    :on-click #(rf/dispatch [:saved-searches/saved-search-clicked search-id])]
    (ssu/email-frequency-display-name saved-search)
    (d/formatted-date :date (f/parse (f/formatters :date-time) update-time))
    [edit-actions saved-search]])

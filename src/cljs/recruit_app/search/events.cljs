@@ -1,12 +1,12 @@
 (ns recruit-app.search.events
   (:require [re-frame.core :as rf]
+            [recruit-app.events :as events]
             [recruit-app.db :as db]
             [ajax.core :as ajax]
             [cljs.reader :as edn]
             [clojure.walk :as w]
             [clojure.string :as str]
             [recruit-app.util.uri :as u]
-            [recruit-app.util.events :as re]
             [recruit-app.util.response :as r]
             [cemerick.url :as url]
             [day8.re-frame.async-flow-fx]
@@ -171,74 +171,74 @@
   {:db       (dissoc db :search :search-results)
    :dispatch [(table/reset-event ::table/search-results)]})
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search/load-view
   load-view)
 
-(rf/reg-event-db
+(events/reg-event-db
   :search/loc-auto-pr
   loc-auto-pr)
 
-(rf/reg-event-db
+(events/reg-event-db
   :search/add-loc
   add-loc)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search/loc-auto
   loc-auto)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search/new-search
   new-search)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search/click-candidate
   click-candidate)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search/click-fa
   click-fa)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search/pay-curtain-click
   pay-curtain-click)
 
-(rf/reg-event-db
+(events/reg-event-db
   :search/set-saved-search
   set-saved-search)
 
-(rf/reg-event-db
+(events/reg-event-db
   :search/copy-results-criteria
   copy-results-criteria)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search/search
   search)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search/handle-search-response
   handle-search-response)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search/min-experience-change
   min-experience-change)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search/max-experience-change
   max-experience-change)
 
-(rf/reg-event-db
+(events/reg-event-db
   :search/get-work-experience-ids
   get-work-experience-ids)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search/criteria-search-criteria-salary-min-change
   criteria-search-criteria-salary-min-change)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search/criteria-search-criteria-salary-max-change
   criteria-search-criteria-salary-max-change)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :search/reset-all
   reset-all)

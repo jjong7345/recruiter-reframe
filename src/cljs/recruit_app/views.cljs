@@ -96,8 +96,8 @@
     (fn []
       (cond
         @show-email-verification? [panel :email-verification]
-        @show-preapproved-search? [search/index]
         @declined? [dv/declined-view]
+        @show-preapproved-search? [search/index]
         @show-panel? [panel @active-panel @authenticated?]
         :else [login/index]))))
 

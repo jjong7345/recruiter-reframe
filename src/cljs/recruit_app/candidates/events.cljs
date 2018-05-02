@@ -1,7 +1,7 @@
 (ns recruit-app.candidates.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [re-pressed.core :as rp]
-            [recruit-app.util.events :as re]
+            [recruit-app.util.events :as ev]
             [recruit-app.util.uri :as u]
             [recruit-app.util.response :as r]
             [recruit-app.util.candidate :as c]
@@ -14,10 +14,10 @@
             [recruit-app.components.modal :as modal]
             [recruit-app.components.table :as table]))
 
-(re/reg-events "candidates" ["active-index" "view-type" "active-jobseeker-id"])
-(re/reg-toggle-event "candidates" "is-exporting?")
-(re/reg-toggle-event "candidates" "show-export-success-modal?")
-(re/reg-toggle-event "candidates" "dismissing?")
+(ev/reg-events "candidates" ["active-index" "view-type" "active-jobseeker-id"])
+(ev/reg-toggle-event "candidates" "is-exporting?")
+(ev/reg-toggle-event "candidates" "show-export-success-modal?")
+(ev/reg-toggle-event "candidates" "dismissing?")
 
 (defn load-view
   "First sets query params then dispatches event to load candidate data"
@@ -198,78 +198,78 @@
                                    next-route (conj [[:go-to-route next-route]
                                                      [{:which 39}]]))}]})
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/load-view
   load-view)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/email-candidate
   email-candidate)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/export-to-ats-success
   export-to-ats-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/export-to-ats-failure
   export-to-ats-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/export-to-ats
   export-to-ats)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/download-resume
   download-resume)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/dismiss-candidate
   dismiss-candidate)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/dismiss-candidate-success
   dismiss-candidate-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/dismiss-candidate-failure
   dismiss-candidate-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/fetch-candidate
   fetch-candidate)
 
-(rf/reg-event-db
+(events/reg-event-db
   :candidates/fetch-candidate-success
   fetch-candidate-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/fetch-candidate-failure
   fetch-candidate-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/track-candidate-view
   track-candidate-view)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/application-viewed
   application-viewed)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/set-initial-candidate-data
   set-initial-candidate-data)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/load-saved-search
   load-saved-search)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/fetch-current-search-page
   fetch-current-search-page)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/load-page
   load-page)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :candidates/register-candidate-keypress
   register-candidate-keypress)

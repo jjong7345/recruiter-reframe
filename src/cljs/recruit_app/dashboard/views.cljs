@@ -8,8 +8,8 @@
             [cljs.reader :refer [read-string]]
             [goog.string :as gs]
             [recruit-app.util.img :as img]
+            [recruit-app.components.loading :as loading]
             [recruit-app.util.chart :as chart]
-            [recruit-app.util.date :as date]
             [recruit-app.util.date :as date]
             [recruit-app.util.dashboard :as da]
             [recruit-app.util.education :as ed]
@@ -23,7 +23,8 @@
             [recruit-app.components.loading :as lo]
             [recruit-app.components.layout :as layout]
             [recruit-app.components.table :as table]
-            [recruit-app.util.date :as d]))
+            [stylefy.core :refer [use-style]]
+            [recruit-app.styles :as styles]))
 
 (defn most-education
   []
@@ -36,7 +37,7 @@
       (let [degree-text (if @is-highest-degree? "Degree" "or Higher Degree")]
         (when (not @display-data-not-available?)
           [rc/v-box
-           :class "top-stat most-education"
+           :class "top-stat most-education col-xs-12 col-sm-12 col-md-4 col-lg-4"
            :children [[:div.row1 (str @most-applicants-label " " degree-text)]
                       [:div.row2 (str @most-applicants-percentage " %")]
                       [:div.row3 (str "Site Average: " @site-average "% " @most-applicants-label " " degree-text)]]])))))
@@ -48,7 +49,7 @@
         site-average (rf/subscribe [:dashboard/experience-site-average])]
     (fn []
       [rc/v-box
-       :class "top-stat"
+       :class "top-stat col-xs-12 col-sm-12 col-md-4 col-lg-4"
        :children [[:div.row1 (str @most-applicants-label " Years")]
                   [:div.row2 (str @most-applicants-percentage " %")]
                   [:div.row3 (str "Site Average: " @site-average "%")]]])))
@@ -57,8 +58,9 @@
   []
   (let [average-salary (rf/subscribe [:dashboard/average-salary])]
     (fn []
-      [rc/v-box
-       :class "top-stat"
+      [layout/column
+       :padding 0
+       :class "top-stat col-xs-12 col-sm-12 col-md-4 col-lg-4"
        :children [[:div.row1 "Average Salary"]
                   [:div.row2 (str "$" @average-salary "k")]
                   [:div.row3 "Site Average: $154k"]]])))
@@ -70,6 +72,7 @@
     (fn []
       [rc/v-box
        :gap "4px"
+       :class "hidden-xs"
        :children [[h/header-5 "Education"]
                   (when @dataset
                     (if @display-data-not-available?
@@ -116,6 +119,7 @@
   (let [dataset (rf/subscribe [:dashboard/experience-dataset])]
     (fn []
       [rc/v-box
+       :class "hidden-xs"
        :children [[h/header-5 "Experience (Year)"]
                   (when @dataset
                     [experience-chart-by-range])
@@ -135,9 +139,12 @@
   []
   [rc/v-box
    :gap "4px"
+   :class "hidden-xs"
    :children [[h/header-5 "Salary"]
               [salary-chart-by-range]
               [salary-chart-legend]]])
+
+(def mobile-divider [:div.visible-xs (use-style styles/dashboard-mobile-divider)])
 
 (defn education
   []
@@ -180,13 +187,15 @@
     (fn []
       [b/box
        :label "Applicant Demographics"
-       :class "dashboard-component applicant-demo"
+       :class (str "dashboard-component applicant-demo" (when-not @has-applicants? " hidden-xs"))
        :body (if @has-applicants?
                [rc/v-box
                 :class "charts"
                 :gap "20px"
                 :children [[education]
+                           mobile-divider
                            [experience]
+                           mobile-divider
                            [salary]]]
                [no-applicants-view])])))
 
@@ -208,7 +217,7 @@
 
 (defn performing-list-item
   [{:keys [publication_date locations job_id company_name title featured]}]
-  (let [days (date/days-passed-since (d/db-date-time publication_date))
+  (let [days (date/days-passed-since (date/db-date-time publication_date))
         applicants (-> locations
                        (first)
                        (:applicants)
@@ -222,13 +231,13 @@
         location (-> locations
                      (first)
                      (:location))]
-    [layout/row
+    [layout/wrapping-row
      :padding 6
      :justify :between
      :align :start
      :children [[layout/column
                  :padding 0
-                 :class "col-xs-7"
+                 :class "col-xs-12 col-sm-12 col-md-7 col-lg-7"
                  :children [[layout/row
                              :padding 0
                              :children [[hl/hyperlink-href-medium
@@ -239,10 +248,9 @@
                              :children [[:div (str days " Days • " applicants " Applications • " views " Views")]]]]]
                 [layout/column
                  :padding 0
-                 :class "col-xs-5"
+                 :class "col-xs-12 col-sm-12 col-md-5 col-lg-5"
                  :children [[layout/row
-                             :padding 0
-                             :justify :end
+                             :justify :center
                              :children [(if (jb/current-promotion featured)
                                           [review-btn job_id]
                                           [promote-btn job_id])]]]]]]))
@@ -263,7 +271,7 @@
                                          :label (str (da/trim-long-saved-search-name (gs/unescapeEntities search-name))
                                                      (when (not-empty keyword) (str ", " keyword))
                                                      (when (not-empty location) (str ", " location)))
-                                         :href (str "#/search-results/" search-id)]
+                                         :on-click #(rf/dispatch [:saved-searches/saved-search-clicked search-id])]
                                         [:div (when (not-empty last-run)
                                                 (str "Last run: " (date/formatted-date :month-and-date (date/subscribe-date-time-with-ms last-run))))]]]]]]]))
 
@@ -383,7 +391,7 @@
                       :on-click #(rf/dispatch [:go-to-shopify])]]
                     [hl/hyperlink-small
                      :class "top-right"
-                     :label "Buy Promoted Jobs to boost your results"
+                     :label "Buy Promoted Jobs to boost results"
                      :on-click #(rf/dispatch [:go-to-shopify])])
        :body (if @has-job-post-performance?
                [layout/column
@@ -525,15 +533,16 @@
 
 (defn team-members-summary
   []
-  (let [team-members (rf/subscribe [:dashboard/team-members])]
+  (let [team-members (rf/subscribe [:dashboard/team-members])
+        is-admin? (rf/subscribe [:dashboard/is-admin?])
+        loading-team-summary? (rf/subscribe [:dashboard/loading-team-summary?])]
     (fn []
       [b/box
        :class "team-members-summary"
        :label "Team Members Summary"
        :top-right [:div.sub-title "Last 30 Days"]
        :header-justify :start
-       :body (if @team-members
-               [table/table
+       :body [table/table
                 :headers [[table/header-cell
                            :label "Name"]
                           [table/header-cell
@@ -548,49 +557,53 @@
                            :label "Searches"]
                           [table/header-cell
                            :label "Resume Views"]]
-                :row-data @team-members])])))
+                :row-data @team-members
+                :loading? @loading-team-summary?
+                :loading-component loading/loading-circle-small]])))
 
 (defn body
   []
-  (let [team-summary (rf/subscribe [:dashboard/team-summary-data])]
+  (let [is-admin? (rf/subscribe [:dashboard/is-admin?])]
     (fn []
       [rc/h-box
        :class "content"
-       :children [[rc/h-box
+       :children [[layout/wrapping-row
+                   :padding 0
                    :justify :between
                    :width "100%"
                    :children [[layout/col-left
-                               :class "col-xs-2"
-                               :children [[layout/row-top
+                               :class "col-xs-12 col-sm-12 col-md-2 col-lg-2 no-padding-mobile"
+                               :children [[layout/row
                                            :children [[job-posts]]]
                                           [layout/row
                                            :children [[engagement]]]
-                                          [layout/row-bottom
+                                          [layout/row
                                            :children [[usage]]]]]
                               [layout/col-right
-                               :class "col-xs-10"
-                               :children [(when @team-summary
+                               :class "col-xs-12 col-sm-12 col-md-10 col-lg-10 no-padding-mobile"
+                               :children [(when @is-admin?
                                             [layout/row-top
+                                             :class "hidden-xs"
                                              :children [[team-members-summary]]
                                              :padding-bottom 18])
                                           [layout/row-top
-                                           :children [[rc/h-box
+                                           :children [[layout/wrapping-row
+                                                       :padding 0
                                                        :width "100%"
                                                        :children [[layout/col-left
-                                                                   :class "col-xs-7"
-                                                                   :children [[layout/row-top
+                                                                   :class "col-xs-12 col-sm-12 col-md-7 col-lg-7 no-padding-mobile"
+                                                                   :children [[layout/row
                                                                                :children [[job-post-performance]]]
-                                                                              [layout/row-bottom
+                                                                              [layout/row
                                                                                :children [[application-demographics]]]]]
                                                                   [layout/col-right
-                                                                   :class "col-xs-5"
-                                                                   :children [[layout/row-top
+                                                                   :class "col-xs-12 col-sm-12 col-md-5 col-lg-5 no-padding-mobile"
+                                                                   :children [[layout/row
                                                                                :children [[saved-searches]]]
                                                                               [layout/row
                                                                                :children [[suggested-candidates]]]
-                                                                              [layout/row-bottom
-                                                                               :children [[ad]]]
-                                                                              ]]]]]]]]]]]])))
+                                                                              [layout/row
+                                                                               :children [[ad]]]]]]]]]]]]]]])))
 
 (defn index
   []

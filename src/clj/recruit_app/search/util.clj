@@ -16,13 +16,10 @@
         (str/replace #"/" "\\\\/")
         (str/replace #"," " ")
         (str/replace #";" " ")
-        (str/replace #"\|" "")
-        (str/replace #" OR " " ")
+        (str/replace #"\|" " OR ")
         (str/replace #"\b( +-)|^( *)-" " NOT ")
         (str/replace #"\\" "\\\\")
         (str/replace #"!" "\\\\!")
-        (str/replace #"\(" "\\\\(")
-        (str/replace #"\)" "\\\\)")
         (str/replace #"\:" "\\\\:")
         (str/replace #"\^" "\\\\^")
         (str/replace #"\[" "\\\\[")
@@ -30,16 +27,17 @@
         (str/replace #"\{" "\\\\{")
         (str/replace #"\}" "\\\\}")
         (str/replace #"\~" "\\\\~")
-        (str/replace #"\*" "\\\\*")
-        (str/replace #"\?" "\\\\?")
-        (str/replace #"\+" "\\\\+")
-        (str/replace #"\-" "\\\\-"))))
+        (str/replace #"\?" "\\\\?"))))
 
 
 (defn- upper-case-booleans
   [string]
   (-> string
       (str/replace #"\b( +or +)" " OR ")
+      (str/replace #"\)( +or +)" ") OR ")
+      (str/replace #"\*( +or +)" "* OR ")
+      (str/replace #"\)( +and +)" ") AND ")
+      (str/replace #"\*( +and +)" "* AND ")
       (str/replace #"\b( +and +)" " AND ")))
 
 
@@ -48,7 +46,6 @@
   (-> string
       (str/trim)
       (str/replace #"(AND$)|(and$)" "")
-      (str/replace #"OR" "or")
       (str/replace #"(\s+OR$)|(\s+or$)" "")
       (str/replace #"(^\s*AND)|(^\s*and)" "")
       (str/replace #"(-$)" "")))

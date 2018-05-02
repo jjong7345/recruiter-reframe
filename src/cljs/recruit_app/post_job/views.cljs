@@ -15,7 +15,9 @@
             [recruit-app.util.number_format :as nf]
             [clojure.string :as cs]
             [recruit-app.util.img :as img]
-            [recruit-app.components.loading :as l]))
+            [recruit-app.components.loading :as l]
+            [recruit-app.components.form :as form]
+            [recruit-app.styles :as styles]))
 
 (def min-max (partial iv/min-max-slider "post-job"))
 (def exp-tabs
@@ -98,7 +100,7 @@
 
 
 (defn min-comp-dropdown []
-  [iv/drpdn-view
+  [form/range-dropdown
    :ns "post-job"
    :type "min-comp"
    :choices (dd/salaries "Select min")
@@ -106,7 +108,7 @@
    :error-msg [:div {:style {:width "138px"}} "Please select the minimum salary"]])
 
 (defn max-comp-dropdown []
-  [iv/drpdn-view
+  [form/range-dropdown
    :ns "post-job"
    :type "max-comp"
    :choices (dd/salaries "Select max")
@@ -114,7 +116,7 @@
    :error-msg [:div {:style {:width "138px"}} "Please select the \n maximum salary"]])
 
 (defn industry-dropdown []
-  [iv/drpdn-view
+  [form/standard-dropdown
    :ns "post-job"
    :type "industry"
    :label "Industry"
@@ -123,7 +125,7 @@
    :error-msg "Company Industry needs to be selected."])
 
 (defn employee-dropdown []
-  [iv/drpdn-view
+  [form/standard-dropdown
    :ns "post-job"
    :type "employee"
    :label "Number of employees"

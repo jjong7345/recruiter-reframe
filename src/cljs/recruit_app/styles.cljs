@@ -14,6 +14,7 @@
 (def white "#fff")
 (def light-grey "#cccccc")
 (def medium-grey "#888888")
+(def darker-grey "#979797")
 (def background-grey "#F5F5F5")
 (def text-link-teal "#09AEBC")
 (def text-link-active "#0994A0")
@@ -29,9 +30,9 @@
 ;; Layout
 (def column {})
 (def row {:width "100%"})
-(def wrapping-row-basic {:flex-wrap "wrap!important"})
-(def wrapping-row (merge wrapping-row-basic {:margin "-6px 0"}))
+(def wrapping-row (merge row {:flex-wrap "wrap!important"}))
 (def wrapping-row-child {:margin "6px 0"})
+(def wrapping-row-with-children (merge wrapping-row {:margin "-6px 0"}))
 (def page-content-container {:background-color background-grey})
 (def page-content {:width      content-width
                    :min-height "500px"
@@ -149,25 +150,14 @@
 (def input-holder {:width "100%"})
 (def input (merge bordered {:font-family font-light
                             :font-size   "14px"}))
-(def input-text-small (merge
-                        input
-                        {:height  "30px"
-                         :padding "7px 12px 6px"}))
-(def input-text-medium (merge
-                         input
-                         {:font-size "16px"
-                          :height    "40px"
-                          :padding   "6px 12px"}))
-(def input-text-medium-no-border (merge
-                                   input-text-medium
-                                   {:border "none !important"}))
-(def input-textarea-small (merge
-                            input
-                            {:padding "7px 12px 6px"}))
-(def input-textarea-medium (merge
-                             input
-                             {:font-size "16px"
-                              :padding   "6px 12px"}))
+(def standard-dropdown-input-holder {:width "490px"
+                                     :margin "0px 20px 0px 0px"})
+(def range-dropdown-input-holder {:width "180px"
+                                  :margin "0px 0px 0px 0px"})
+(def standard-dropdown-input {:border        (str "1px solid " darker-grey "!important")
+                              :border-radius "2px!important"
+                              :font-family   font-light
+                              :font-size     "16px"})
 (def input-text (merge
                   input
                   {:height  "30px"
@@ -192,6 +182,23 @@
                        input
                        {:width      "100%"
                         :max-height "32px"}))
+(def range-dropdown (merge
+                         standard-dropdown-input
+                         {:width  "180px"
+                          :height "42px"}))
+(def standard-dropdown (merge
+                         standard-dropdown-input
+                         {:width  "490px"
+                          :height "42px"}))
+(def secondary-dropdown (merge
+                      standard-dropdown-input
+                      {:width  "490px"
+                       :height "42px"
+                       :background "#cccccc"}))
+(def tertiary-dropdown (merge
+                      standard-dropdown-input
+                      {:width  "180px"
+                       :height "32px"}))
 (def checkbox-container {:display             "block"
                          :font-size           "14px"
                          :position            "relative"
@@ -276,10 +283,6 @@
                               :max-width   "400px"}))
 (def input-with-dropdown-holder {:position "relative"
                                  :width    "100%"})
-(def inline-form-info (merge
-                        form-label
-                        {:text-transform "initial"}))
-(def inline-form-label {:margin "0"})
 
 ;; Buttons
 (def button {:padding       "11px 30px 10px!important"
@@ -311,11 +314,6 @@
 (def primary-transaction-button (merge
                                   primary-button
                                   transaction-button))
-(def primary-transaction-button-large (merge
-                                        primary-button
-                                        transaction-button
-                                        {:height    "50px"
-                                         :font-size "20px"}))
 (def secondary-transaction-button (merge
                                     secondary-button
                                     transaction-button))
@@ -549,6 +547,9 @@
 (def info-box-display {:font-family font-regular
                        :font-size   "13px"
                        :color       charcoal-light})
+(def dashboard-mobile-divider {:width         "265px"
+                               :margin        "0 auto"
+                               :border-bottom (str "1px solid " light-grey)})
 (def overlay-holder {:position "relative"
                      :width    "100%"})
 (def overlay (merge

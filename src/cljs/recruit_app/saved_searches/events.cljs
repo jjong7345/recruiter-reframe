@@ -1,5 +1,5 @@
 (ns recruit-app.saved-searches.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [recruit-app.db :as db]
             [ajax.core :as ajax]
             [clojure.set :refer [union difference]]
@@ -130,62 +130,72 @@
                    :on-failure      [:saved-searches/save-search-failure]}
    :dispatch      [::modal/close-modal ::modal/edit-saved-search]})
 
-(rf/reg-event-fx
+(defn saved-search-clicked
+  "Clears search results and routes to results for given search-id"
+  [_ [_ search-id]]
+  {:route    (str "/search-results/" search-id)
+   :dispatch [:search-results/clear-search-results]})
+
+(events/reg-event-fx
   :saved-searches/process-response-delete
   process-response-delete)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :saved-searches/delete-saved-searches-failure
   delete-saved-searches-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :saved-searches/delete
   delete-saved-searches)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :saved-searches/get-initial-data
   get-initial-data)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :saved-searches/load-view
   load-view)
 
-(rf/reg-event-db
+(events/reg-event-db
   :saved-searches/assoc-saved-search
   assoc-saved-search)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :saved-searches/fetch-saved-search
   fetch-saved-search)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :saved-searches/fetch-saved-search-success
   fetch-saved-search-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :saved-searches/fetch-saved-searches
   fetch-saved-searches)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :saved-searches/fetch-saved-searches-success
   fetch-saved-searches-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :saved-searches/open-save-new-modal
   open-save-new-modal)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :saved-searches/open-edit-modal
   open-edit-modal)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :saved-searches/save-search
   save-search)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :saved-searches/save-search-success
   save-search-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :saved-searches/save-search-failure
   save-search-failure)
+
+(events/reg-event-fx
+  :saved-searches/saved-search-clicked
+  saved-search-clicked)

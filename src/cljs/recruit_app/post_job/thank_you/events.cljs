@@ -1,5 +1,5 @@
 (ns recruit-app.post-job.thank-you.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [recruit-app.db :as db]
             [ajax.core :as ajax]
             [cljs.reader :as edn]
@@ -61,26 +61,26 @@
   [db _]
   (dissoc db :post-job.thank-you))
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :post-job.thank-you/load-view
   load-view)
 
-(rf/reg-event-db
+(events/reg-event-db
   :post-job.thank-you/handle-suggested
   handle-suggested)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :post-job.thank-you/fetch-suggested-candidates
   fetch-suggested-candidates)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :post-job.thank-you/handle-promote-pending-job
   handle-promote-pending-job)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :post-job.thank-you/promote-pending-job
   promote-pending-job)
 
-(rf/reg-event-db
+(events/reg-event-db
   :post-job.thank-you/clear-db
   clear-db)

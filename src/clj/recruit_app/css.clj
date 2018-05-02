@@ -58,6 +58,35 @@
 (def header-height "50px")
 (def footer-height "186px")
 
+(defn dropdown-container-results
+  [font-size]
+  [:.chosen-container
+    [:.chosen-results
+     [:li {:font-family ladders-font
+           :font-size   font-size
+           :color "#000000"}
+      [:&:hover {:background "#cccccc"
+                 :color      white}]
+      [:&.highlighted {:background bright-teal
+                       :color      white}]]]])
+(defn rc-dropdown
+  ([font-size]
+   (rc-dropdown font-size nil))
+  ([font-size background]
+   (rc-dropdown font-size background nil))
+  ([font-size background font-style]
+    [:.rc-dropdown
+      [:.chosen-single {:height  "40px"
+                        :padding "8px 0px 8px 4px"
+                        :background background}
+        [:span {:padding     "6px 4px 6px 10px"
+                :height      "40px"
+                :max-height  "28px"
+                :font-size   font-size
+                :font-style  font-style
+                :line-height "14px"
+                :color       "#000000"}]]]))
+
 (defmacro defbreakpoint [name media-params]
   `(defn ~name [& rules#]
      (st/at-media ~media-params
@@ -193,13 +222,13 @@
           :-webkit-box-shadow none}]]
     [:.chosen-container-active.chosen-container-active
      [:.chosen-single {:box-shadow    none
-                       :border        (str "1px solid " ladders-teal)
+                       :border        (str "1px solid " bright-teal)
                        :border-bottom white}]
      [:.chosen-drop {:box-shadow    none
-                     :border        (str "1px solid " ladders-teal)
+                     :border        (str "1px solid " bright-teal)
                      :border-top    none
                      :border-radius 0}]]
-    [:.chosen-container [:.chosen-results [:li.highlighted {:background ladders-teal}]]]
+    [:.chosen-container [:.chosen-results [:li.highlighted {:background bright-teal}]]]
     [:.quill-holder {:position relative}
      [:&.error [:.ql-container.ql-snow {:border-color error-red}]
       [:.ql-toolbar.ql-snow {:border-color        error-red
@@ -520,7 +549,8 @@
     ;_+
     ;_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
 
-    [:.footer-container {:position "relative"}
+    [:.footer-container {:position "relative"
+                         :margin-top "60px"}
      [:.footer {:width      "100%"
                 :height     footer-height
                 :background ladders-black
@@ -739,6 +769,7 @@
     [:.content {:margin "0 auto"
                 :height "100%"
                 :width  content-width}]
+    (small-screen [:.content {:width "345px"}])
     [:.title-box {:margin "48px auto 0"
                   :width  content-width}
      [:.subtitle {:font-size "14px"}]]
@@ -1825,9 +1856,6 @@
        [:.form-control {:width  "100%"
                         :height "40px"}]]
       [:.salary-labels {:width "490px"}]
-      [:.rc-dropdown {:width  "180px"
-                      :border "solid 1px #979797"}
-       [:&.error {:border "1px solid #ed4e3d"}]]
       [:.comp-label {:width       "180px"
                      :text-align  "left"
                      :color       ladders-text-dark
@@ -1863,9 +1891,6 @@
       [:.rc-dropdown
        [:&.error {:border "1px solid #ed4e3d"}]]
       [:.holder {:margin-top "10px"}]
-      [:.chosen-container-single
-       [:.chosen-single {:height "48px"}
-        [:span {:padding "5px 4px"}]]]
       [:.title {:margin         "20px 0 10px"
                 :font-size      "36px"
                 :letter-spacing "-.2px"
@@ -2709,7 +2734,8 @@
       [:.form-box {:width            "830px"
                    :background-color "#f5f1ec"
                    :margin           "23px auto 0"}
-       [:.contact-sales-form {:padding "10px 50px 0 30px !important"}
+       [:.contact-sales-form {:width   "475px"
+                              :padding "10px 50px 0 30px"}
         [:.form-row {:width  "395px"
                      :margin "21px 0 0"}
          [:.form-label {:font-size   "14px"
@@ -2728,8 +2754,16 @@
           [:+ [:.form-element {:margin-left "14px"}]]]
          [:.error-msg {:font-size "12px"
                        :color     "red"}]]
-        [:.submit-btn {:margin "16px 0 38px"
-                       :width  "100%"}]]
+        [:.submit-btn {:margin           "16px 0 38px"
+                       :width            "100%"
+                       :height           "56px"
+                       :background-color ladders-orange
+                       :font-size        "20px"
+                       :font-family      ladders-font
+                       :font-weight      "300"
+                       :text-align       "center"
+                       :color            "#ffffff"
+                       :border-radius    "0"}]]
        [:.full-access-info {:width            "355px"
                             :background-color "#ece6df"}
         [:.info-title {:width       "221px"
@@ -3148,6 +3182,7 @@
       [:.row2 {:font-family ladders-font-boldest
                :font-size   "30px"}]
       [:.row3 {:font-size "12px"}]]
+     (small-screen [:.top-stat {:width "100%"}])
      [:#barchart-education {:height "100px"}]
      [:.barchart-education-svg {:width "330px"}
       [:rect {:fill "#fbbc48"}]
@@ -3237,6 +3272,26 @@
    ;; Dropdown
 
    [:#app
+    [:.rc-point-wrapper
+     [:.input-group {:width "100%"}
+      [:.rc-h-box {:width "100%"}]
+      [:label
+       [:&.dropdown-button {:width         "100%"
+                            :font-size     "16px"
+                            :margin        "0 0 12px"
+                            :border        "1px solid #cccccc"
+                            :border-radius "2px"}]]]]
+    [:span.dropdown-button.activator.input-group-addon {:display "none"}]
+    [:.chosen-container-active.chosen-container-active
+     [:.chosen-single {:box-shadow    none
+                       :border        (str "1px solid " bright-teal)
+                       :border-bottom white}]
+     [:.chosen-drop {:box-shadow    none
+                     :border        (str "1px solid " bright-teal)
+                     :border-top    none
+                     :border-radius 0}
+      [:a {:padding 0
+           :margin  0}]]]
     [:.component-dropdown
      [:.rc-point-wrapper
       [:.input-group {:width "100%"}
@@ -3291,9 +3346,23 @@
                          :background-color "#f5f5f5"}]]]]
     [:.location {:height "30px"
                  :border "1px solid #cccccc"}]
+    [:.range-dropdown
+     (rc-dropdown "16px" nil "italic")
+     (dropdown-container-results "16px")]
+    [:.standard-dropdown
+     (rc-dropdown "16px")
+     (dropdown-container-results "16px")]
+    [:.secondary-dropdown
+     (rc-dropdown "16px" "#d6d6d6")
+     (dropdown-container-results "16px")]
+    [:.tertiary-dropdown
+     (rc-dropdown "14px")
+     (dropdown-container-results "14px")]
 
     ;; Popover
-    [:.rc-popover-anchor-wrapper {:z-index 11}]]
+    [:.rc-popover-anchor-wrapper {:z-index 11}]
+
+    (small-screen [:.no-padding-mobile {:padding "0!important"}])]
 
    ;_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+
    ;_+

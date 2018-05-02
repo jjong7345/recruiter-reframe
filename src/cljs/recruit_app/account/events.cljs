@@ -1,25 +1,15 @@
 (ns recruit_app.account.events
   (:require [re-frame.core :as rf]
             [recruit-app.db :as db]
-            [recruit-app.util.events :as re]
+            [recruit-app.events :as events]
+            [recruit-app.util.events :as ev]
             [ajax.core :as ajax]
             [cljs.reader :as edn]
             [recruit-app.util.uri :as u]
             [recruit-app.util.account :as au]
             [recruit-app.util.img :as img]))
 
-(defn load-view
-  "Dispatches events to load account data"
-  [_ _]
-  {:dispatch     [:account/init-account-data]
-   :ga/page-view ["/account" {}]})
-
-(rf/reg-event-db
-  :account/set-active-tab
-  (fn [db [_ tab]]
-    (assoc-in db [:account :active-tab] tab)))
-
-(re/reg-events "account" ["fname" "lname" "job-title" "function"
+(ev/reg-events "account" ["fname" "lname" "job-title" "function"
                           "company" "role" "company-site" "linkedin"
                           "facebook" "twitter" "blog" "bio"
                           "email" "phone" "ext" "street"
@@ -31,19 +21,30 @@
                           "suggested-cand" "search-based-cand" "show-errors?"
                           "lever-user-selected" "api-key"])
 
-(re/reg-toggle-event "account" "is-uploading?")
-(re/reg-toggle-event "account" "show-sample-bio?")
-(re/reg-toggle-event "account" "newsletter")
-(re/reg-toggle-event "account" "special-offers")
-(re/reg-toggle-event "account" "connection-req")
-(re/reg-toggle-event "account" "feedback")
-(re/reg-toggle-event "account" "suggested-cand")
-(re/reg-toggle-event "account" "search-based-cand")
+(ev/reg-toggle-event "account" "is-uploading?")
+(ev/reg-toggle-event "account" "show-sample-bio?")
+(ev/reg-toggle-event "account" "newsletter")
+(ev/reg-toggle-event "account" "special-offers")
+(ev/reg-toggle-event "account" "connection-req")
+(ev/reg-toggle-event "account" "feedback")
+(ev/reg-toggle-event "account" "suggested-cand")
+(ev/reg-toggle-event "account" "search-based-cand")
 
-(rf/reg-event-fx
-  :account/set-default-image
-  (fn [_ _]
-    {:dispatch [:account/profile-img-url-change (img/url :default-profile-img)]}))
+(defn load-view
+  "Dispatches events to load account data"
+  [_ _]
+  {:dispatch     [:account/init-account-data]
+   :ga/page-view ["/account" {}]})
+
+(defn set-active-tab
+  "Sets active tab in db"
+  [db [_ tab]]
+  (assoc-in db [:account :active-tab] tab))
+
+(defn set-default-image
+  "Assocs default img url to profile img in db"
+  [_ _]
+  {:dispatch [:account/profile-img-url-change (img/url :default-profile-img)]})
 
 (defn on-get-ats-settings
   [{:keys [db]} [_ response]]
@@ -257,90 +258,98 @@
     (.setTimeout js/window #(rf/dispatch [:account/get-greenhouse-url]) 1500)
     {:dispatch-n events}))
 
-(rf/reg-event-fx
+(events/reg-event-db
+  :account/set-active-tab
+  set-active-tab)
+
+(events/reg-event-fx
+  :account/set-default-image
+  set-default-image)
+
+(events/reg-event-fx
   :account/init-account-data
   init-account-data)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/profile-update
   profile-update)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/profile-update-fail
   profile-update-fail)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/password-update
   password-update)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/communication-preference-update
   communication-preference-update)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/goto-manage-saved-searches
   goto-manage-saved-searches)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/on-get-ats-settings
   on-get-ats-settings)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/ats-dropdown-change
   ats-dropdown-change)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/fetch-ats-data
   fetch-ats-data)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/fetch-lever-data
   fetch-lever-data)
 
-(rf/reg-event-db
+(events/reg-event-db
   :account/on-lever-fetched-success
   on-lever-fetched-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/on-lever-fetched-fail
   on-lever-fetched-fail)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/ats-update
   ats-update)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/ats-update-complete
   ats-update-complete)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/on-profile-saved
   on-profile-saved)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/profile-preview
   profile-preview)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/on-password-change-fail
   on-password-change-fail)
 
-(rf/reg-event-db
+(events/reg-event-db
   :account/clear-passwords
   clear-passwords)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/go-to-greenhouse
   go-to-greenhouse)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/get-greenhouse-url
   get-greenhouse-url)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/gh-redirect
   gh-redirect)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :account/load-view
   load-view)

@@ -1,6 +1,6 @@
 (ns recruit-app.superuser.events
   (:require [recruit-app.util.events :as ev]
-            [re-frame.core :as rf]
+            [recruit-app.events :as events]
             [recruit-app.util.uri :as u]
             [ajax.core :as ajax]
             [recruit-app.util.ajax :as a]
@@ -295,135 +295,135 @@
                    :on-success      [:superuser/repost-job-success]
                    :on-failure      [:superuser/repost-job-failure]}})
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/impersonate-success
   impersonate-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/impersonate-user
   impersonate-user)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/redact-permissions-recruiter-id-change
   redact-permissions-recruiter-id-change)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/fetch-redact-permissions
   fetch-redact-permissions)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/fetch-redact-permissions-success
   fetch-redact-permissions-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/set-editing-permissions
   set-editing-permissions)
 
-(rf/reg-event-db
+(events/reg-event-db
   :superuser/assoc-redact-permissions
   assoc-redact-permissions)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/save-redact-permissions
   save-redact-permissions)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/save-redact-permissions-success
   save-redact-permissions-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/save-redact-permissions-failure
   save-redact-permissions-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/remove-redact-permissions
   remove-redact-permissions)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/remove-redact-permissions-success
   remove-redact-permissions-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/remove-redact-permissions-failure
   remove-redact-permissions-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/save-inventory
   save-inventory)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/save-inventory-failure
   save-inventory-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/save-inventory-success
   save-inventory-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/fetch-inventory
   fetch-inventory)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/fetch-inventory-failure
   fetch-inventory-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/fetch-inventory-success
   fetch-inventory-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/inventory-recruiter-id-change
   inventory-recruiter-id-change)
 
-(rf/reg-event-db
+(events/reg-event-db
   :superuser/assoc-inventory
   assoc-inventory)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/load-job-success
   load-job-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/load-job
   load-job)
 
-(rf/reg-event-db
+(events/reg-event-db
   :superuser/set-feature-job-dates
   set-feature-job-dates)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/save-job-promotion-failure
   save-job-promotion-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/save-job-promotion-success
   save-job-promotion-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/save-job-promotion
   save-job-promotion)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/cancel-job-promotion
   cancel-job-promotion)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/cancel-job-promotion-success
   cancel-job-promotion-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/cancel-job-promotion-failure
   cancel-job-promotion-failure)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/repost-job
   repost-job)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/repost-job-success
   repost-job-success)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :superuser/repost-job-failure
   repost-job-failure)
 

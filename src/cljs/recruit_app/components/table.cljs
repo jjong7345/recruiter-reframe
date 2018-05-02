@@ -1,5 +1,6 @@
 (ns recruit-app.components.table
   (:require [re-frame.core :as rf]
+            [recruit-app.events :as events]
             [re-com.core :as rc
              :refer-macros [handler-fn]]
             [stylefy.core :refer [use-style]]
@@ -170,7 +171,7 @@
         (fn [[page-map page-number]]
           (get page-map page-number [])))
 
-      (rf/reg-event-fx
+      (events/reg-event-fx
         (set-page-event table-key)
         (fn [{:keys [db]} [_ page]]
           {:db       (assoc-in db [::table table-key ::pagination ::page] page)
@@ -199,7 +200,7 @@
         (fn [sorted-by [_ sort-key]]
           (= sorted-by sort-key)))
 
-      (rf/reg-event-fx
+      (events/reg-event-fx
         (sort-event table-key)
         (fn [{:keys [db]} [_ sort-col sort-dir]]
           {:db       (-> db
@@ -229,7 +230,7 @@
         (fn [db]
           (get-in db [::table table-key ::pagination ::loading?] false)))
 
-      (rf/reg-event-db
+      (events/reg-event-db
         (fetch-success-event table-key)
         (fn [db [_ page on-success {:keys [total results] :as response}]]
           (when on-success
@@ -247,7 +248,7 @@
               (assoc-in [::table table-key ::pagination ::loading?] false)
               (update-in [::table table-key ::pagination ::fetching-pages] disj page))))
 
-      (rf/reg-event-fx
+      (events/reg-event-fx
         (pagination-event table-key)
         (fn [{:keys [db]} [_ page fetch-params on-success]]
           (when-not (or (get-in db [::table table-key ::pagination ::pages-data page])
@@ -263,7 +264,7 @@
                              :on-success      [(fetch-success-event table-key) page on-success]
                              :on-failure      [(fetch-failure-event table-key) page]}})))
 
-      (rf/reg-event-db
+      (events/reg-event-db
         (reset-event table-key)
         (fn [db]
           (update-in db [::table table-key] dissoc ::pagination)))
@@ -321,19 +322,19 @@
         (fn [[page-data checked]]
           (and (not-empty page-data) (subset? page-data checked))))
 
-      (rf/reg-event-db
+      (events/reg-event-db
         (on-check-event table-key)
         (fn [db [_ val]]
           (update-in db [::table table-key ::checked-rows] (fnil add-or-remove #{}) val)))
 
-      (rf/reg-event-fx
+      (events/reg-event-fx
         (on-check-all-event table-key)
         (fn [{:keys [db]} [_ vals checked?]]
           (if checked?
             {:dispatch [(clear-checked-event table-key)]}
             {:db (update-in db [::table table-key ::checked-rows] (fnil union #{}) (set vals))})))
 
-      (rf/reg-event-db
+      (events/reg-event-db
         (clear-checked-event table-key)
         (fn [db]
           (update-in db [::table table-key] dissoc ::checked-rows)))
@@ -443,7 +444,8 @@
   "Arguments for table component"
   [{:name :headers :required true :type "vector" :validate-fn headers? :description "Vector of header components"}
    {:name :row-data :required true :type "vector" :validate-fn sequential? :description "Collection of vectors of data to be displayed in each row"}
-   {:name :loading? :required false :type "boolean" :validate-fn boolean? :description "Whether or not the table data is still loading"}])
+   {:name :loading? :required false :type "boolean" :validate-fn boolean? :description "Whether or not the table data is still loading"}
+   {:name :loading-component :required false :type "boolean" :validate-fn loading/loading-circle-component? :description "Whether or not the loading circle component is valid"}])
 
 (def empty-table-message
   "Renders row displaying that no results were found"
@@ -469,8 +471,8 @@
 
 (defn table
   "Renders table"
-  [& {:keys [headers row-data loading?]
-      :or   {loading? false}
+  [& {:keys [headers row-data loading? loading-component]
+      :or   {loading? false loading-component loading/loading-circle-large}
       :as   args}]
   {:pre [(validate-args-macro table-args args "table")]}
   (let [header [(into [header-row] headers)]]
@@ -488,7 +490,7 @@
                 (cond
                   loading? [layout/row
                             :justify :center
-                            :children [[loading/loading-circle-large]]]
+                            :children [[loading-component]]]
                   (empty? row-data) [layout/row-bottom
                                      :padding-top 30
                                      :justify :center

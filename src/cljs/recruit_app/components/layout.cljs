@@ -14,10 +14,11 @@
 (defn column
   "Renders rc/v-box with added :padding, :padding-left, :padding-right options.
   Accepts integers for each option"
-  [& {:keys [padding padding-left padding-right] :as params}]
+  [& {:keys [padding padding-left padding-right class] :as params}]
   (let [padding-str (padding-str 0 (or padding-right padding padding-default)
                                  0 (or padding-left padding padding-default))]
     (-> (merge params (use-style styles/column))
+        (update :class str " " class)
         (assoc-in [:style :padding] padding-str)
         (dissoc :padding :padding-left :padding-right)
         (->> (mapcat identity)
@@ -37,12 +38,13 @@
 (defn row
   "Renders rc/v-box with added :padding, :padding-top, :padding-bottom options
   Accepts integers for each option"
-  [& {:keys [padding padding-top padding-bottom styles]
+  [& {:keys [padding padding-top padding-bottom styles class]
       :or {styles styles/row}
       :as params}]
   (let [padding-str (padding-str (or padding-top padding padding-default) 0
                                  (or padding-bottom padding padding-default) 0)]
     (-> (merge params (use-style styles))
+        (update :class str " " class)
         (assoc-in [:style :padding] padding-str)
         (dissoc :padding :padding-top :padding-bottom :styles)
         (->> (mapcat identity)
@@ -59,27 +61,27 @@
   [& params]
   (apply row (conj (vec params) :padding-bottom 0)))
 
+(defn wrapping-row
+  "Renders row component with flex-wrap = wrap"
+  [& {:as params}]
+  (-> params
+      (assoc :styles styles/wrapping-row)
+      (->> (mapcat identity)
+           (into [row]))))
+
 (defn wrapping-row-child
   "In order to create line spacing when wrapping, wrapping row children must
   have the same margin to counteract the margin used in wrapping-row"
   [component]
   [:div (use-style styles/wrapping-row-child) component])
 
-(defn wrapping-row
+(defn wrapping-row-with-children
   "Renders row component with flex-wrap = wrap
   It also wraps each child in 'wrapping-row-child'"
   [& {:keys [children] :as params}]
   (-> params
       (assoc :children (map (partial vector wrapping-row-child) children))
-      (assoc :styles styles/wrapping-row)
-      (->> (mapcat identity)
-           (into [row]))))
-
-(defn wrapping-row-basic
-  "Renders row component with flex-wrap = wrap"
-  [& {:as params}]
-  (-> params
-      (assoc :styles styles/wrapping-row-basic)
+      (assoc :styles styles/wrapping-row-with-children)
       (->> (mapcat identity)
            (into [row]))))
 

@@ -34,14 +34,6 @@
    params
    styles/primary-transaction-button])
 
-(defn primary-transaction-button-large
-  "Applies styles for primary transaction button to re-com component"
-  [& params]
-  [util/recom-component-with-styles
-   rc/button
-   params
-   styles/primary-transaction-button-large])
-
 (defn primary-dashboard-button
   "Applies styles for primary dashboard button to re-com component"
   [& params]

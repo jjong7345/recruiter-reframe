@@ -31,16 +31,6 @@
    [:label label]
    styles/form-label])
 
-(defn inline-form-label
-  "Display a form label and inline info"
-  [& {:keys [label info]}]
-  [util/recom-component-with-styles
-   rc/h-box
-   [:justify :between
-    :children [[form-label :label label]
-               [:div (use-style styles/inline-form-info) (str info)]]]
-   styles/inline-form-label])
-
 (defn input-error
   "Displays error message"
   [message]
@@ -55,26 +45,7 @@
    (use-style styles/input-flag)
    text])
 
-(defn input
-  "Renders a form input field"
-  [& {:keys [model width placeholder attr on-change validation-regex input-type class input-options max-length styles]}]
-  [util/recom-component-with-styles
-   rc/input-text
-   (into [] (concat [:class class
-                     :model model
-                     :width (or width "none")
-                     :placeholder placeholder
-                     :on-change on-change
-                     :change-on-blur? false
-                     :validation-regex validation-regex
-                     :attr attr
-                     :input-type (or input-type :input)]
-                    (or input-options [])
-                    (when max-length [:attr {:max-length max-length}])))
-
-   styles])
-
-(defn- input-text-base
+(defn input-text
   "Renders a text input with input-text styling
 
   Params:
@@ -91,8 +62,8 @@
    :disabled?   Whether or not input is disabled? (default is false)
    :height      Keyword denoting height (options are :normal or :tall)
    :flag        Optional flag to be displayed at top right of input"
-  [& {:keys [ns type label class placeholder attr validation input-type spec error-msg max-length input-options
-             disabled? height flag component]
+  [& {:keys [ns type label class placeholder attr validation input-type spec error-msg
+             disabled? height flag]
       :or   {height :normal input-type :input disabled? false}}]
   (let [input-model (rf/subscribe [(keyword ns (str type))])
         show-errors? (when (and spec error-msg)
@@ -100,7 +71,7 @@
     (fn []
       [util/recom-component-with-styles
        rc/v-box
-       [:class (str type "-holder holder " class)
+       [:class class
         :children [(when label
                      [layout/row-top
                       :padding-bottom 6
@@ -109,68 +80,21 @@
                                   :label label]
                                  (when flag
                                    [input-flag flag])]])
-                   [component
-                    :model input-model
-                    :width "none"
-                    :placeholder placeholder
-                    :on-change #(rf/dispatch [(keyword ns (str type "-change")) %])
-                    :validation-regex validation
-                    :attr attr
-                    :input-type input-type
-                    :input-options input-options
-                    :max-length max-length]
+                   [util/recom-component-with-styles
+                    rc/input-text
+                    [:model input-model
+                     :width "none"
+                     :placeholder placeholder
+                     :on-change #(rf/dispatch [(keyword ns (str type "-change")) %])
+                     :change-on-blur? false
+                     :validation-regex validation
+                     :attr attr
+                     :disabled? disabled?
+                     :input-type input-type]
+                    (if (= height :tall) styles/input-text-tall styles/input-text)]
                    (when (and spec error-msg @show-errors? (not (s/valid? spec @input-model)))
                      [input-error error-msg])]]
        styles/input-holder])))
-
-(defn input-no-border
-  "Renders a form input field without border"
-  [& {:as params}]
-  (-> params
-      (assoc :styles styles/input-text-medium-no-border)
-      (->> (mapcat identity)
-           (into [input]))))
-
-(defn input-border-small
-  "Renders a form input field with border"
-  [& {:as params}]
-  (-> params
-      (assoc :styles styles/input-text-small)
-      (->> (mapcat identity)
-           (into [input]))))
-
-(defn input-border-medium
-  "Renders a form input field with border medium size"
-  [& {:as params}]
-  (-> params
-      (assoc :styles styles/input-text-medium)
-      (->> (mapcat identity)
-           (into [input]))))
-
-(defn input-textarea-border-small
-  "Renders a form input textarea with border"
-  [& {:as params}]
-  (-> params
-      (assoc :input-type :textarea)
-      (assoc :styles styles/input-textarea-small)
-      (->> (mapcat identity)
-           (into [input]))))
-
-(defn input-text-medium
-  "input text component with label and 40px height textfield"
-  [& {:as params}]
-  (-> params
-      (assoc :component input-border-medium)
-      (->> (mapcat identity)
-           (into [input-text-base]))))
-
-(defn input-text
-  "input text component with label and 30px height textfield"
-  [& {:as params}]
-  (-> params
-      (assoc :component input-border-small)
-      (->> (mapcat identity)
-           (into [input-text-base]))))
 
 (defn character-limit
   [char-count]
@@ -240,6 +164,67 @@
                              vec))
                     styles/single-dropdown]]]
        styles/input-holder])))
+
+(defn dropdown
+  "Renders recom single-dropdown with styles"
+  [& {:keys [ns type label class choices dropdown-type dropdown-style input-style]}]
+  (let [model (rf/subscribe [(keyword ns (str type))])]
+    (fn []
+      [util/recom-component-with-styles
+       rc/v-box
+       [:class (str class " " dropdown-type "-dropdown")
+        :children [(when label
+                     [layout/row-top
+                      :padding-bottom 6
+                      :children [[form-label
+                                  :label label]]])
+                   [util/recom-component-with-styles
+                    rc/single-dropdown
+                    [:model model
+                     :choices choices
+                     :on-change #(rf/dispatch [(keyword ns (str type "-change")) %])]
+                     dropdown-style]]]
+       input-style])))
+
+(defn range-dropdown
+  "Renders recom single-dropdown with styles"
+  [& {:as params}]
+  (-> params
+      (assoc :dropdown-type "range")
+      (assoc :dropdown-style styles/range-dropdown)
+      (assoc :input-style styles/range-dropdown-input-holder)
+      (->> (mapcat identity)
+           (into [dropdown]))))
+
+(defn standard-dropdown
+  "Renders recom single-dropdown with styles"
+  [& {:as params}]
+  (-> params
+      (assoc :dropdown-type "standard")
+      (assoc :dropdown-style styles/standard-dropdown)
+      (assoc :input-style styles/standard-dropdown-input-holder)
+      (->> (mapcat identity)
+           (into [dropdown]))))
+
+(defn secondary-dropdown
+  "Renders recom single-dropdown with styles"
+  [& {:as params}]
+  (-> params
+      (assoc :dropdown-type "secondary")
+      (assoc :dropdown-style styles/secondary-dropdown)
+      (assoc :input-style styles/standard-dropdown-input-holder)
+      (->> (mapcat identity)
+           (into [dropdown]))))
+
+(defn tertiary-dropdown
+  "Renders recom single-dropdown with styles"
+  [& {:as params}]
+  (-> params
+      (assoc :dropdown-type "tertiary")
+      (assoc :dropdown-style styles/tertiary-dropdown)
+      (assoc :input-style styles/standard-dropdown-input-holder)
+      (->> (mapcat identity)
+           (into [dropdown]))))
 
 (defn datepicker-dropdown
   "Renders a datepicker component"

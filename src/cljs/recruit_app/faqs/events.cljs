@@ -1,12 +1,11 @@
 (ns recruit-app.faqs.events
-  (:require [re-frame.core :as rf]
-            [recruit-app.db :as db]))
+  (:require [recruit-app.events :as events]))
 
 
 (defn go-to-anchor
   [_ [_ anchor]]
   (.scrollIntoView (.getElementById js/document anchor)))
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :faqs/go-to-anchor
   go-to-anchor)

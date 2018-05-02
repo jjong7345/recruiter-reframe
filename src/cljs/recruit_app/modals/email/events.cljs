@@ -1,5 +1,5 @@
 (ns recruit-app.modals.email.events
-  (:require [re-frame.core :as rf]
+  (:require [recruit-app.events :as events]
             [ajax.core :as ajax]
             [recruit-app.util.events :as ev]
             [recruit-app.util.dropdowns :as dd]
@@ -29,159 +29,224 @@
        convert-to-vector
        (zipmap db-keys)))
 
-(rf/reg-event-db
+(defn process-response
+  "Processes response from getting email templates"
+  [db [_ response]]
+  (let [resp (->> response
+                  (keywordize-keys)
+                  (map convert-keys)
+                  (key-by-id))]
+    (assoc-in db [:email :templates] resp)))
+
+(defn get-templates
+  "Calls API to fetch templates if not already fetched"
+  [{:keys [db]} _]
+  (when-not (get-in db [:email :templates])
+    {:ra-http-xhrio {:method          :get
+                     :uri             (u/uri :get-templates)
+                     :format          (ajax/json-request-format)
+                     :response-format (ajax/json-response-format {:keywords? true})
+                     :on-success      [:email/process-response]
+                     :on-failure      [:email/process-response]}}))
+
+(defn togg-email-modal
+  "Toggles value for show-email-modal?"
+  [db _]
+  (assoc-in db [:email :show-email-modal?] (not (get-in db [:email :show-email-modal?]))))
+
+(defn clear-email-modal
+  "Dissocs values from email db"
+  [db _]
+  (update db :email dissoc :recipients :subject :greetings :msg-body :name :active-template :show-errors?))
+
+(defn close-email-modal
+  "Clears modal and closes"
+  [_ _]
+  {:dispatch-n [[:email/togg-email-modal]
+                [:email/clear-email-modal]]})
+
+(defn template-click
+  "Sets active template"
+  [_ [_ template]]
+  {:dispatch-n [[:email/active-template-change (:id template)]
+                [:email/merge-template template]]})
+
+(defn merge-template
+  "Sets current template values in db"
+  [db [_ template]]
+  (update-in db [:email] merge (select-keys template [:subject :msg-body :name])))
+
+(defn process-update-response
+  "Associates new values for template"
+  [db [_ response]]
+  (let [{:keys [active-template msg-body subject name]} (:email db)]
+    (-> db
+        (assoc-in [:email :templates active-template :name] name)
+        (assoc-in [:email :templates active-template :subject] subject)
+        (assoc-in [:email :templates active-template :msg-body] msg-body))))
+
+(defn update-template
+  "Calls API to update template"
+  [{:keys [db]} _]
+  (let [{:keys [active-template msg-body subject name]} (:email db)
+        data {:name     name
+              :subject  subject
+              :msg-body msg-body}]
+    {:ra-http-xhrio {:method          :put
+                     :uri             (u/uri :update-template active-template)
+                     :params          data
+                     :format          (ajax/json-request-format)
+                     :response-format (ajax/json-response-format {:keywords? true})
+                     :on-success      [:email/process-update-response]
+                     :on-failure      [:http-no-on-failure]}}))
+
+(defn add-template
+  "Associates new template to db"
+  [db [_ {:keys [id] :as template}]]
+  (assoc-in db [:email :templates id] template))
+
+(defn process-create-response
+  "Associates new template to db and makes active"
+  [db [_ template response]]
+  (let [template-id (->> response
+                         (keywordize-keys)
+                         :template-id)]
+    {:dispatch-n [[:email/add-template (assoc template :id template-id)]
+                  [:email/active-template-change template-id]]}))
+
+(defn save-template
+  "Calls API to save new template"
+  [{:keys [db]} _]
+  (let [{:keys [msg-body subject name] :as template} (:email db)
+        data {:name     name
+              :subject  subject
+              :msg-body msg-body}]
+    {:ra-http-xhrio {:method          :post
+                     :uri             (u/uri :create-template)
+                     :params          data
+                     :format          (ajax/json-request-format)
+                     :response-format (ajax/json-response-format {:keywords? true})
+                     :on-success      [:email/process-create-response template]
+                     :on-failure      [:email/process-create-response template]}}))
+
+(defn dissoc-template
+  "Dissocs template from db"
+  [db [_ id]]
+  (update-in db [:email :templates] dissoc id))
+
+(defn process-delete-response
+  "Processes response from delete call"
+  [{:keys [db]} [_ id response]]
+  (let [active-template (get-in db [:email :active-template])
+        dispatch (cond-> (into '() [[:email/dissoc-template id]])
+                         (= id active-template) (conj [:email/active-template-change nil]))]
+    (if response
+      {:dispatch-n (into [] dispatch)}
+      {})))
+
+(defn delete-template
+  "Makes call to API to delete template"
+  [_ [_ id]]
+  {:ra-http-xhrio {:method          :delete
+                   :uri             (u/uri :delete-template id)
+                   :format          (ajax/json-request-format)
+                   :response-format (ajax/json-response-format {:keywords? true})
+                   :on-success      [:email/process-delete-response id]
+                   :on-failure      [:email/process-delete-response id]}})
+
+(defn process-send-response
+  "Closes modal and displays alert"
+  [_ _]
+  {:dispatch-n [[:email/togg-email-modal]
+                [:alerts/add-success "Successfully Sent Email To Candidate!"]
+                [:email/toggle-is-sending?]]})
+
+(defn send
+  "Calls API to send email"
+  [{:keys [db]} _]
+  {:dispatch-n [[:email/toggle-is-sending?]
+                [:email/show-errors?-change false]]
+   :ra-http-xhrio {:method          :post
+                   :uri             (u/uri :send-email)
+                   :params          (-> db :email eu/email-send-data)
+                   :format          (ajax/json-request-format)
+                   :response-format (ajax/json-response-format {:keywords? true})
+                   :on-success      [:email/process-send-response]
+                   :on-failure      [:email/process-send-response]}})
+
+(defn set-email-recipients
+  "Sets given recipients to email recipients"
+  [db [_ recipients]]
+  (assoc-in db [:email :recipients] recipients))
+
+(events/reg-event-db
   :email/process-response
-  (fn
-    [db [_ response]]
-    (let [resp (->> response
-                    (keywordize-keys)
-                    (map convert-keys)
-                    (key-by-id))]
-      (assoc-in db [:email :templates] resp))))
+  process-response)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :email/get-templates
-  (fn [{:keys [db]} _]
-    (when-not (get-in db [:email :templates])
-      {:ra-http-xhrio {:method          :get
-                       :uri             (u/uri :get-templates)
-                       :format          (ajax/json-request-format)
-                       :response-format (ajax/json-response-format {:keywords? true})
-                       :on-success      [:email/process-response]
-                       :on-failure      [:email/process-response]}})))
+  get-templates)
 
-(rf/reg-event-db
+(events/reg-event-db
   :email/togg-email-modal
-  (fn [db _]
-    (assoc-in db [:email :show-email-modal?] (not (get-in db [:email :show-email-modal?])))))
+  togg-email-modal)
 
-(rf/reg-event-db
+(events/reg-event-db
   :email/clear-email-modal
-  (fn [db _]
-    (update db :email dissoc :recipients :subject :greetings :msg-body :name :active-template :show-errors?)))
+  clear-email-modal)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :email/close-email-modal
-  (fn [_ _]
-    {:dispatch-n [[:email/togg-email-modal]
-                  [:email/clear-email-modal]]}))
+  close-email-modal)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :email/template-click
-  (fn [_ [_ template]]
-    {:dispatch-n [[:email/active-template-change (:id template)]
-                  [:email/merge-template template]]}))
+  template-click)
 
-(rf/reg-event-db
+(events/reg-event-db
   :email/merge-template
-  (fn [db [_ template]]
-    (update-in db [:email] merge (select-keys template [:subject :msg-body :name]))))
+  merge-template)
 
-(rf/reg-event-db
+(events/reg-event-db
   :email/process-update-response
-  (fn [db [_ response]]
-    (let [{:keys [active-template msg-body subject name]} (:email db)]
-      (-> db
-          (assoc-in [:email :templates active-template :name] name)
-          (assoc-in [:email :templates active-template :subject] subject)
-          (assoc-in [:email :templates active-template :msg-body] msg-body)))))
+  process-update-response)
 
-(rf/reg-event-db
-  :email/process-update-fail
-  (fn [db [_ response]]
-    db))
-
-(rf/reg-event-fx
+(events/reg-event-fx
   :email/update-template
-  (fn [{:keys [db]} _]
-    (let [{:keys [active-template msg-body subject name]} (:email db)
-          data {:name     name
-                :subject  subject
-                :msg-body msg-body}]
-      {:ra-http-xhrio {:method          :put
-                       :uri             (u/uri :update-template active-template)
-                       :params          data
-                       :format          (ajax/json-request-format)
-                       :response-format (ajax/json-response-format {:keywords? true})
-                       :on-success      [:email/process-update-response]
-                       :on-failure      [:email/process-update-fail]}})))
+  update-template)
 
-(rf/reg-event-db
+(events/reg-event-db
   :email/add-template
-  (fn [db [_ {:keys [id] :as template}]]
-    (assoc-in db [:email :templates id] template)))
+  add-template)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :email/process-create-response
-  (fn [db [_ template response]]
-    (let [template-id (->> response
-                           (keywordize-keys)
-                           :template-id)]
-      {:dispatch-n [[:email/add-template (assoc template :id template-id)]
-                    [:email/active-template-change template-id]]})))
+  process-create-response)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :email/save-template
-  (fn [{:keys [db]} _]
-    (let [{:keys [msg-body subject name] :as template} (:email db)
-          data {:name     name
-                :subject  subject
-                :msg-body msg-body}]
-      {:ra-http-xhrio {:method          :post
-                       :uri             (u/uri :create-template)
-                       :params          data
-                       :format          (ajax/json-request-format)
-                       :response-format (ajax/json-response-format {:keywords? true})
-                       :on-success      [:email/process-create-response template]
-                       :on-failure      [:email/process-create-response template]}})))
+  save-template)
 
-(rf/reg-event-db
+(events/reg-event-db
   :email/dissoc-template
-  (fn [db [_ id]]
-    (update-in db [:email :templates] dissoc id)))
+  dissoc-template)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :email/process-delete-response
-  (fn [{:keys [db]} [_ id response]]
-    (let [active-template (get-in db [:email :active-template])
-          dispatch (cond-> (into '() [[:email/dissoc-template id]])
-                           (= id active-template) (conj [:email/active-template-change nil]))]
-      (if response
-        {:dispatch-n (into [] dispatch)}
-        {}))))
+  process-delete-response)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :email/delete-template
-  (fn [_ [_ id]]
-    {:ra-http-xhrio {:method          :delete
-                     :uri             (u/uri :delete-template id)
-                     :format          (ajax/json-request-format)
-                     :response-format (ajax/json-response-format {:keywords? true})
-                     :on-success      [:email/process-delete-response id]
-                     :on-failure      [:email/process-delete-response id]}}))
+  delete-template)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :email/process-send-response
-  (fn [_ _]
-    {:dispatch-n [[:email/togg-email-modal]
-                  [:alerts/add-success "Successfully Sent Email To Candidate!"]
-                  [:email/toggle-is-sending?]]}))
+  process-send-response)
 
-(rf/reg-event-fx
+(events/reg-event-fx
   :email/send
-  (fn [{:keys [db]} _]
-    {:dispatch-n [[:email/toggle-is-sending?]
-                  [:email/show-errors?-change false]]
-     :ra-http-xhrio {:method          :post
-                     :uri             (u/uri :send-email)
-                     :params          (-> db :email eu/email-send-data)
-                     :format          (ajax/json-request-format)
-                     :response-format (ajax/json-response-format {:keywords? true})
-                     :on-success      [:email/process-send-response]
-                     :on-failure      [:email/process-send-response]}}))
+  send)
 
-(rf/reg-event-db
-  ;; Sets given recipients to email recipients
+(events/reg-event-db
   :email/set-email-recipients
-  (fn [db [_ recipients]]
-    (assoc-in db [:email :recipients] recipients)))
+  set-email-recipients)

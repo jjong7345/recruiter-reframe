@@ -14,11 +14,7 @@
             [recruit-app.modals.profile-image.views :as pi]
             [recruit-app.util.img :as img]
             [recruit-app.specs.account :as spec]
-            [recruit-app.components.loading :as l]
-            [recruit-app.components.hyperlink :as link]
-            [recruit-app.components.button :as btn]
-            [recruit-app.components.form :as form]
-            [recruit-app.components.layout :as layout]))
+            [recruit-app.components.loading :as l]))
 
 (defn divider []
   [:div {:class "divider"}])
